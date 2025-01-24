@@ -23,3 +23,4 @@
 /Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/obj/Debug/net8.0/PuzzleBubble.pdb
 /Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/obj/Debug/net8.0/PuzzleBubble.genruntimeconfig.cache
 /Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/obj/Debug/net8.0/ref/PuzzleBubble.dll
+/Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/obj/Debug/net8.0/PuzzleBubble.sourcelink.json

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+// using GameObjects.Bubble;
 
 namespace PuzzleBubble;
 
@@ -120,7 +121,7 @@ public class PuzzleBubble : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
+        GraphicsDevice.Clear(Color.DimGray);
 
         _spriteBatch.Begin();
 
@@ -158,4 +159,53 @@ public class PuzzleBubble : Game
 
         base.Draw(gameTime);
     }
+
+    // public void InitializeBubble(){
+    //     // Logic to initialize the game with bubbles
+    //     // Example: Create a grid of bubbles
+    //     for (int row = 0; row < 8; row++)
+    //     {
+    //         for (int col = 0; col < 12; col++)
+    //         {
+    //             Bubble newBubble = new Bubble();
+    //             newBubble.Position = new Vector2(100 + col * 50, 50 + row * 50);
+    //             _bubbles.Add(newBubble);
+    //         }
+    //     }
+    // }
+
+    // public void ShootBubble(){
+    //     // Logic to shoot a bubble
+    //     // Example: Create a new bubble and set its direction
+    //     Bubble newBubble = new Bubble();
+    //     newBubble.Position = new Vector2(900, 950); // Starting position of the gun
+    //     newBubble.Direction = new Vector2(0, -1); // Shoot upwards
+    //     _bubbles.Add(newBubble); // Add the new bubble to the list of bubbles
+    // }
+
+    // public void CheckCollision(){
+    //     // Logic to check for collisions between bubbles
+    //     for (int i = 0; i < _bubbles.Count; i++)
+    //     {
+    //         for (int j = i + 1; j < _bubbles.Count; j++)
+    //         {
+    //             if (_bubbles[i].Bounds.Intersects(_bubbles[j].Bounds))
+    //             {
+    //                 // Handle collision
+    //                 _bubbles[i].OnCollision(_bubbles[j]);
+    //                 _bubbles[j].OnCollision(_bubbles[i]);
+    //             }
+    //         }
+    //     }
+    // }
+
+    // public void UpdateGrid(){
+    //     // Logic to update the grid with the current state of bubbles
+    //     foreach (var bubble in _bubbles)
+    //     {
+    //         int gridX = (int)(bubble.Position.X / _gridCellSize);
+    //         int gridY = (int)(bubble.Position.Y / _gridCellSize);
+    //         _gameTable[gridX, gridY] = bubble.Color; // Assuming bubble has a Color property
+    //     }
+    // }
 }

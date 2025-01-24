@@ -3,7 +3,7 @@
 // using Microsoft.Xna.Framework.Audio;
 // using Microsoft.Xna.Framework.Graphics;
 
-// namespace GP_Midterm_BubblePuzzle.GameObjects {
+// namespace PuzzleBubble.GameObjects {
 // 	public class Bubble : _GameObject {
 // 		public float Speed;
 // 		public float Angle;
