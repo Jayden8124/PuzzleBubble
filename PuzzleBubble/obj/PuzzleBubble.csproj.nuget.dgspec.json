@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/PuzzleBubble.csproj": {}
+    "C:\\Study-Comsci\\Y3T2\\COMGAME\\Project_midterm\\PuzzleBubble\\PuzzleBubble\\PuzzleBubble.csproj": {}
   },
   "projects": {
-    "/Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/PuzzleBubble.csproj": {
+    "C:\\Study-Comsci\\Y3T2\\COMGAME\\Project_midterm\\PuzzleBubble\\PuzzleBubble\\PuzzleBubble.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/PuzzleBubble.csproj",
+        "projectUniqueName": "C:\\Study-Comsci\\Y3T2\\COMGAME\\Project_midterm\\PuzzleBubble\\PuzzleBubble\\PuzzleBubble.csproj",
         "projectName": "PuzzleBubble",
-        "projectPath": "/Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/PuzzleBubble.csproj",
-        "packagesPath": "/Users/jay/.nuget/packages/",
-        "outputPath": "/Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/obj/",
+        "projectPath": "C:\\Study-Comsci\\Y3T2\\COMGAME\\Project_midterm\\PuzzleBubble\\PuzzleBubble\\PuzzleBubble.csproj",
+        "packagesPath": "C:\\Users\\Petch\\.nuget\\packages\\",
+        "outputPath": "C:\\Study-Comsci\\Y3T2\\COMGAME\\Project_midterm\\PuzzleBubble\\PuzzleBubble\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/jay/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Petch\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -68,7 +68,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.404/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -10,7 +10,7 @@ public class PuzzleBubble : Game
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
-    Texture2D _bubble, _gun, _rect;
+    Texture2D _bubble, _gun, _rect, _b1, _b2, _b3, _h1, _h2;
 
     enum GameState
     {
@@ -50,10 +50,16 @@ public class PuzzleBubble : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        // _bubble = Content.Load<Texture2D>("bubble"); // Bubble Texture
-        // _gun = Content.Load<Texture2D>("gun");  // gun Texture
+        _bubble = Content.Load<Texture2D>("bubble"); // Bubble Texture
+        _gun = Content.Load<Texture2D>("gun");  // gun Texture
 
         _rect = new Texture2D(GraphicsDevice, 1200, 830);
+
+        _b2 = Content.Load<Texture2D>("b2");
+        _b1 = Content.Load<Texture2D>("b1");
+        _b3 = Content.Load<Texture2D>("b3");
+        _h1 = Content.Load<Texture2D>("h1");
+        _h2 = Content.Load<Texture2D>("h2");
 
         Color[] data = new Color[1200 * 830];
         for (int i = 0; i < data.Length; ++i) data[i] = Color.White;
@@ -124,7 +130,12 @@ public class PuzzleBubble : Game
         GraphicsDevice.Clear(Color.DimGray);
 
         _spriteBatch.Begin();
-
+        _spriteBatch.Draw(_bubble, new Vector2(100, 50), Color.White);
+        _spriteBatch.Draw(_b1, new Vector2(150, 50), Color.White);
+        _spriteBatch.Draw(_b2, new Vector2(200, 50), Color.White);
+        _spriteBatch.Draw(_b3, new Vector2(250, 50), Color.White);
+        _spriteBatch.Draw(_h1, new Vector2(300, 50), Color.White);
+        _spriteBatch.Draw(_h2, new Vector2(350, 50), Color.White);
         switch (_currentGameState)
         {
             case GameState.Start:
