@@ -9,6 +9,19 @@
           "build/MonoGame.Content.Builder.Task.targets": {}
         }
       },
+      "MonoGame.Extended/4.0.4": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/MonoGame.Extended.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/MonoGame.Extended.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "MonoGame.Framework.DesktopGL/3.8.2.1105": {
         "type": "package",
         "dependencies": {
@@ -114,6 +127,21 @@
         "build/MonoGame.Content.Builder.Task.targets",
         "monogame.content.builder.task.3.8.2.1105.nupkg.sha512",
         "monogame.content.builder.task.nuspec"
+      ]
+    },
+    "MonoGame.Extended/4.0.4": {
+      "sha512": "4CXSHzChnp72GXZo/RoK+iKL7nm1X1XI6uer/osbSjyT+YGhXwnta6+P5+ZnwNp+NyeZtYuN+q/9L98pJgYCHQ==",
+      "type": "package",
+      "path": "monogame.extended/4.0.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net8.0/MonoGame.Extended.dll",
+        "lib/net8.0/MonoGame.Extended.xml",
+        "logo-nuget-128.png",
+        "monogame.extended.4.0.4.nupkg.sha512",
+        "monogame.extended.nuspec"
       ]
     },
     "MonoGame.Framework.DesktopGL/3.8.2.1105": {
@@ -234,23 +262,24 @@
   "projectFileDependencyGroups": {
     "net8.0": [
       "MonoGame.Content.Builder.Task >= 3.8.2.1105",
+      "MonoGame.Extended >= 4.0.4",
       "MonoGame.Framework.DesktopGL >= 3.8.2.1105"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Petch\\.nuget\\packages\\": {}
+    "/Users/jay/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Study-Comsci\\Y3T2\\COMGAME\\Project_midterm\\PuzzleBubble\\PuzzleBubble\\PuzzleBubble.csproj",
+      "projectUniqueName": "/Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/PuzzleBubble.csproj",
       "projectName": "PuzzleBubble",
-      "projectPath": "C:\\Study-Comsci\\Y3T2\\COMGAME\\Project_midterm\\PuzzleBubble\\PuzzleBubble\\PuzzleBubble.csproj",
-      "packagesPath": "C:\\Users\\Petch\\.nuget\\packages\\",
-      "outputPath": "C:\\Study-Comsci\\Y3T2\\COMGAME\\Project_midterm\\PuzzleBubble\\PuzzleBubble\\obj\\",
+      "projectPath": "/Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/PuzzleBubble.csproj",
+      "packagesPath": "/Users/jay/.nuget/packages/",
+      "outputPath": "/Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Petch\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/Users/jay/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -283,6 +312,10 @@
             "target": "Package",
             "version": "[3.8.2.1105, )"
           },
+          "MonoGame.Extended": {
+            "target": "Package",
+            "version": "[4.0.4, )"
+          },
           "MonoGame.Framework.DesktopGL": {
             "target": "Package",
             "version": "[3.8.2.1105, )"
@@ -304,7 +337,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.404/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

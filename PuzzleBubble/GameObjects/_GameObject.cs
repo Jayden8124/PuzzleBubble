@@ -1,7 +1,7 @@
 // using Microsoft.Xna.Framework;
 // using Microsoft.Xna.Framework.Graphics;
 
-// namespace GP_Midterm_BubblePuzzle.GameObjects {
+// namespace PuzzleBubble.GameObjects {
 // 	public class _GameObject {
 // 		protected Texture2D _texture;
 
@@ -13,7 +13,7 @@
 
 // 		public string Name;
 
-// 		public bool IsActive;
+// 		public bool IsActive; // Check if the object is active or not
 
 // 		public Rectangle Rectangle {
 // 			get {

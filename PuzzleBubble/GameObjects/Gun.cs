@@ -4,7 +4,7 @@
 // using Microsoft.Xna.Framework.Input;
 // using System;
 
-// namespace GP_Midterm_BubblePuzzle.GameObjects {
+// namespace PuzzleBubble.GameObjects {
 // 	class Gun : _GameObject {
 // 		private Random random = new Random();
 // 		private Texture2D bubbleTexture;

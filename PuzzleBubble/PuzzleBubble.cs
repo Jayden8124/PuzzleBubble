@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-// using GameObjects.Bubble;
+// using PuzzleBubble.GameObjects;
+using System.Collections.Generic;
+using MonoGame.Extended;
 
 namespace PuzzleBubble;
 
@@ -10,16 +12,36 @@ public class PuzzleBubble : Game
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
-    Texture2D _bubble, _gun, _rect, _b1, _b2, _b3, _h1, _h2;
+    // 
+    // private List<Bubble> _bubbles; // เก็บฟองอากาศทั้งหมด
+    private List<Texture2D> _bubbleTextures; // เก็บ Texture สำหรับสุ่ม
 
-    enum GameState
-    {
-        Start,
-        Playing,
-        GameOver
-    }
+    Texture2D _gun; // Object
+    Texture2D _b1, _b2, _b3, _br1, _br2, _br3, _r1, _r2, _r3, _y1, _y2, _y3; // Color Bubble
+    Texture2D _h1, _h2; // Player
+    Texture2D _rect; // Play Zone
 
-    GameState _currentGameState;
+    // Size Play Zone
+    public const int _PlayWidth = 780;
+    public const int _PlayHeight = 915;
+    public const int _scoreboardWidth = 100;
+    public const int _scoreboardHeight = 300;
+    public const int _barNameWidth = 39;
+    public const int _barNameHeight = 338;
+    public const int _pictureBossWidth = 279;
+    public const int _pictureBossHeight = 367;
+
+    // Status Game
+    // bool _isGameEnded = false;
+
+    // enum GameState
+    // {
+    //     Start,
+    //     Playing,
+    //     GameOver
+    // }
+
+    // GameState _currentGameState;
 
     public PuzzleBubble()
     {
@@ -30,12 +52,6 @@ public class PuzzleBubble : Game
 
     protected override void Initialize()
     {
-        // Size Screen
-        // var displayMode = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
-        // _graphics.PreferredBackBufferWidth = displayMode.Width;
-        // _graphics.PreferredBackBufferHeight = displayMode.Height;
-        // _graphics.IsFullScreen = true; // False for Windows Mode
-
         _graphics.PreferredBackBufferWidth = 1920;
         _graphics.PreferredBackBufferHeight = 1080;
 
@@ -50,20 +66,37 @@ public class PuzzleBubble : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        _bubble = Content.Load<Texture2D>("bubble"); // Bubble Texture
-        _gun = Content.Load<Texture2D>("gun");  // gun Texture
+        _gun = Content.Load<Texture2D>("gun");  // Gun Texture
 
-        _rect = new Texture2D(GraphicsDevice, 1200, 830);
+        // Bubble Texture
+        {
+            _b1 = Content.Load<Texture2D>("b1");
+            _b2 = Content.Load<Texture2D>("b2");
+            _b3 = Content.Load<Texture2D>("b3");
+            _br1 = Content.Load<Texture2D>("br1");
+            _br2 = Content.Load<Texture2D>("br2");
+            _br3 = Content.Load<Texture2D>("br3");
+            _r1 = Content.Load<Texture2D>("r1");
+            _r2 = Content.Load<Texture2D>("r2");
+            _r3 = Content.Load<Texture2D>("r3");
+            _y1 = Content.Load<Texture2D>("y1");
+            _y2 = Content.Load<Texture2D>("y2");
+            _y3 = Content.Load<Texture2D>("y3");
+        }
 
-        _b2 = Content.Load<Texture2D>("b2");
-        _b1 = Content.Load<Texture2D>("b1");
-        _b3 = Content.Load<Texture2D>("b3");
-        _h1 = Content.Load<Texture2D>("h1");
-        _h2 = Content.Load<Texture2D>("h2");
+        // Player Texture
+        {
+            _h1 = Content.Load<Texture2D>("h1");
+            _h2 = Content.Load<Texture2D>("h2");
+        }
 
-        Color[] data = new Color[1200 * 830];
-        for (int i = 0; i < data.Length; ++i) data[i] = Color.White;
-        _rect.SetData(data);
+        // Rectangle Texture
+        {
+            _rect = new Texture2D(_graphics.GraphicsDevice, 1, 1);
+            Color[] data = new Color[1];
+            data[0] = Color.Black;
+            _rect.SetData(data);
+        }
     }
 
     protected override void Update(GameTime gameTime)
@@ -73,117 +106,103 @@ public class PuzzleBubble : Game
 
         MouseState state = Mouse.GetState();
 
-            // if (state.LeftButton == ButtonState.Pressed && !_isGameEnded)
-            // {
-            //     int iPos = state.X / 200;
-            //     int jPos = state.Y / 200;
+        // switch (_currentGameState)
+        // {
+        //     case GameState.Start:
+        //         if (state.LeftButton == ButtonState.Pressed)
+        //         {
+        //             _currentGameState = GameState.Playing;
+        //         }
+        //         break;
 
-            //     if (iPos >= 0 && iPos < 3 && jPos >= 0 && jPos < 3)
-            //     {
-            //         //check feasibility
-            //         if (_gameTable[jPos, iPos] == 0)
-            //         {
-            //             if (_isCircleTurn)
-            //             {
-            //                 _gameTable[jPos, iPos] = 1;
-            //             }
-            //             else
-            //             {
-            //                 _gameTable[jPos, iPos] = -1;
-            //             }
+        //     case GameState.Playing:
+        //         // Handle Playing state logic
+        //         // TODO: Add your game update logic here
+        //         break;
 
-            //             //flip turn
-            //             _isCircleTurn = !_isCircleTurn;
-            //         }
-            //     }
-            // }    
-
-        switch (_currentGameState)
-        {
-            case GameState.Start:
-                // Handle Start state logic
-                if (state.LeftButton == ButtonState.Pressed)
-                {
-                    _currentGameState = GameState.Playing;
-                }
-                break;
-
-            case GameState.Playing:
-                // Handle Playing state logic
-                // TODO: Add your game update logic here
-                break;
-
-            case GameState.GameOver:
-                // Handle GameOver state logic
-                if (state.LeftButton == ButtonState.Pressed )
-                {
-                    _currentGameState = GameState.Start;
-                }
-                break;
-        }
+        //     case GameState.GameOver:
+        //         if (state.LeftButton == ButtonState.Pressed)
+        //         {
+        //             _currentGameState = GameState.Start;
+        //             _isGameEnded = true;
+        //         }
+        //         break;
+        // }
 
         base.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.DimGray);
+        GraphicsDevice.Clear(Color.White);
 
         _spriteBatch.Begin();
-        _spriteBatch.Draw(_bubble, new Vector2(100, 50), Color.White);
-        _spriteBatch.Draw(_b1, new Vector2(150, 50), Color.White);
-        _spriteBatch.Draw(_b2, new Vector2(200, 50), Color.White);
-        _spriteBatch.Draw(_b3, new Vector2(250, 50), Color.White);
-        _spriteBatch.Draw(_h1, new Vector2(300, 50), Color.White);
-        _spriteBatch.Draw(_h2, new Vector2(350, 50), Color.White);
-        switch (_currentGameState)
-        {
-            case GameState.Start:
-                // Draw Start state
-                // _spriteBatch.DrawString(Content.Load<SpriteFont>("Font"), "Press Enter to Start", new Vector2(100, 100), Color.White);
-                break;
 
-            case GameState.Playing:
-                // Draw Playing state
-                // _spriteBatch.Draw(_rect, new Vector2(600, 600), Color.White);
+        // Base Background
+        _spriteBatch.Draw(_rect, new Vector2(515, 65), null, Color.Black, 0f, Vector2.Zero, new Vector2(_PlayWidth, _PlayHeight), SpriteEffects.None, 0f);
+        _spriteBatch.Draw(_rect, new Vector2(1360, 100), null, Color.Black, 0f, Vector2.Zero, new Vector2(_scoreboardHeight, _scoreboardWidth), SpriteEffects.None, 0f);
+        _spriteBatch.Draw(_rect, new Vector2(1360, 220), null, Color.Black, 0f, Vector2.Zero, new Vector2(_scoreboardHeight, _scoreboardWidth), SpriteEffects.None, 0f);
+        _spriteBatch.Draw(_rect, new Vector2(80, 90), null, Color.Black, 0f, Vector2.Zero, new Vector2(_barNameHeight, _barNameWidth), SpriteEffects.None, 0f);
+        _spriteBatch.Draw(_rect, new Vector2(70, 165), null, Color.Black, 0f, Vector2.Zero, new Vector2(_pictureBossHeight, _pictureBossWidth), SpriteEffects.None, 0f);
+        _spriteBatch.DrawCircle(new Vector2(1449, 417), 50, 100, Color.Red, 50);
+        
 
-                // Draw bubbles
-                for (int row = 0; row < 8; row++)
-                {
-                    for (int col = 0; col < 12; col++)
-                    {
-                        // _spriteBatch.Draw(_bubble, new Vector2(100 + col * 50, 50 + row * 50), Color.White);
-                    }
-                }
+        // switch (_currentGameState)
+        // {
+        //     case GameState.Start:
+        //         // Draw Start state
+        //         // _spriteBatch.DrawString(Content.Load<SpriteFont>("Font"), "Press Enter to Start", new Vector2(100, 100), Color.White);
+        //         break;
 
-                // Draw gun
-                // _spriteBatch.Draw(_gun, new Vector2(900, 950), Color.White);
-                break;
+        //     case GameState.Playing:
+        //         // Draw Playing state
+        //         // _spriteBatch.Draw(_rect, new Vector2(600, 600), Color.White);
 
-            case GameState.GameOver:
-                // Draw GameOver state
-                // _spriteBatch.DrawString(Content.Load<SpriteFont>("Font"), "Game Over! Press Enter to Restart", new Vector2(100, 100), Color.White);
-                break;
-        }
+        //         // Draw bubbles
+        //         for (int row = 0; row < 8; row++)
+        //         {
+        //             for (int col = 0; col < 12; col++)
+        //             {
+        //                 // _spriteBatch.Draw(_bubble, new Vector2(100 + col * 50, 50 + row * 50), Color.White);
+        //             }
+        //         }
+
+        //         // Draw gun
+        //         // _spriteBatch.Draw(_gun, new Vector2(900, 950), Color.White);
+        //         break;
+
+        //     case GameState.GameOver:
+        //         // Draw GameOver state
+        //         // _spriteBatch.DrawString(Content.Load<SpriteFont>("Font"), "Game Over! Press Enter to Restart", new Vector2(100, 100), Color.White);
+        //         break;
+        // }
 
         _spriteBatch.End();
+        _graphics.BeginDraw(); // Draw a buffer
 
         base.Draw(gameTime);
     }
 
     // public void InitializeBubble(){
-    //     // Logic to initialize the game with bubbles
-    //     // Example: Create a grid of bubbles
-    //     for (int row = 0; row < 8; row++)
+    //     for (int row = 0; row < 5; row++)
     //     {
-    //         for (int col = 0; col < 12; col++)
+    //         int columns = (row % 2 == 0) ? 10 : 9; // Alternate between 10 and 9 columns
+    //         for (int col = 0; col < columns; col++)
     //         {
     //             Bubble newBubble = new Bubble();
+    //             newBubble.Texture = _br1; // Assuming _br1 is the texture for the bubble
     //             newBubble.Position = new Vector2(100 + col * 50, 50 + row * 50);
     //             _bubbles.Add(newBubble);
     //         }
     //     }
     // }
+
+    public void CurrentDisplayMode(){  
+        var displayMode = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
+        _graphics.PreferredBackBufferWidth = displayMode.Width;
+        _graphics.PreferredBackBufferHeight = displayMode.Height;
+        _graphics.IsFullScreen = true; // False for Windows Mode
+    }
 
     // public void ShootBubble(){
     //     // Logic to shoot a bubble
@@ -194,7 +213,8 @@ public class PuzzleBubble : Game
     //     _bubbles.Add(newBubble); // Add the new bubble to the list of bubbles
     // }
 
-    // public void CheckCollision(){
+    // public void CheckCollision()
+    // {
     //     // Logic to check for collisions between bubbles
     //     for (int i = 0; i < _bubbles.Count; i++)
     //     {

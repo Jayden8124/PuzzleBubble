@@ -1,15 +1,12 @@
 // using System;
 // using Microsoft.Xna.Framework;
-// using Microsoft.Xna.Framework.Audio;
 // using Microsoft.Xna.Framework.Graphics;
 
 // namespace PuzzleBubble.GameObjects {
 // 	public class Bubble : _GameObject {
 // 		public float Speed;
 // 		public float Angle;
-		
-// 		public SoundEffectInstance deadSFX , stickSFX;
-
+//         public Texture2D Texture { get; set; } // Property สำหรับเก็บ Texture
 // 		public Bubble(Texture2D texture) : base(texture) {
 			
 // 		}
@@ -48,9 +45,6 @@
 // 						Position = new Vector2((0* 80) + ((0 % 2) == 0 ? 320 : 360), (0 * 70) + 40);
 // 					}
 // 					Singleton.Instance.Shooting = false;
-					
-// 					stickSFX.Volume = Singleton.Instance.SFX_MasterVolume;
-// 					stickSFX.Play();
 // 				}
 
 // 				if (Position.X <= 325) {
@@ -100,11 +94,7 @@
 // 							IsActive = false;
 // 							if (Singleton.Instance.removeBubble.Count >= 3) {
 // 								Singleton.Instance.Score += Singleton.Instance.removeBubble.Count * 100;
-// 								deadSFX.Volume = Singleton.Instance.SFX_MasterVolume;
-// 								deadSFX.Play();
 // 							} else if (Singleton.Instance.removeBubble.Count > 0) {
-// 								stickSFX.Volume = Singleton.Instance.SFX_MasterVolume;
-// 								stickSFX.Play();
 // 								foreach (Vector2 v in Singleton.Instance.removeBubble) {
 // 									gameObjects[(int)v.Y, (int)v.X] = new Bubble(_texture) {
 // 										Name = "Bubble",
