@@ -9,3 +9,90 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:bubble.png
+
+
+protected override void Update(GameTime gameTime)
+{
+    // Shooting Logic
+    if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+    {
+        // Shoot bubble logic
+        var newBubble = new Bubble(_bubbleTextures[new Random().Next(_bubbleTextures.Count)])
+        {
+            Position = new Vector2(900, 950), // Gun position
+            Direction = new Vector2(0, -1) // Shoot upwards
+        };
+        _bubbles.Add(newBubble);
+    }
+
+    base.Update(gameTime);
+}
+
+
+public void CheckCollision()
+{
+    for (int i = 0; i < _bubbles.Count; i++)
+    {
+        for (int j = i + 1; j < _bubbles.Count; j++)
+        {
+            if (_bubbles[i].Bounds.Intersects(_bubbles[j].Bounds))
+            {
+                _bubbles.RemoveAt(j);
+                _bubbles.RemoveAt(i);
+                break;
+            }
+        }
+    }
+}
+
+
+public void UpdateGrid()
+{
+    foreach (var bubble in _bubbles)
+    {
+        int gridX = (int)(bubble.Position.X / 50); // Assuming cell size is 50
+        int gridY = (int)(bubble.Position.Y / 50);
+
+        // Logic to place bubble in the grid
+        if (_gameTable[gridX, gridY] == null)
+            _gameTable[gridX, gridY] = bubble;
+    }
+}
+
+private int _score = 0;
+
+private void CheckGameOver()
+{
+    foreach (var bubble in _bubbles)
+    {
+        if (bubble.Position.Y >= _PlayHeight)
+        {
+            // Handle Game Over
+            _currentGameState = GameState.GameOver;
+            break;
+        }
+    }
+}
+
+foreach (var bubble in _bubbles)
+        {
+            bubble.Draw(_spriteBatch);
+        }
+
+protected override void Draw(GameTime gameTime)
+{
+    _spriteBatch.Begin();
+
+    if (_currentGameState == GameState.Playing)
+    {
+        // Draw Score
+        _spriteBatch.DrawString(Content.Load<SpriteFont>("Font"), $"Score: {_score}", new Vector2(10, 10), Color.Black);
+    }
+    else if (_currentGameState == GameState.GameOver)
+    {
+        _spriteBatch.DrawString(Content.Load<SpriteFont>("Font"), "Game Over! Press Enter to Restart", new Vector2(100, 100), Color.Red);
+    }
+
+    _spriteBatch.End();
+    base.Draw(gameTime);
+}

@@ -1,9 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-// using PuzzleBubble.GameObjects;
+using PuzzleBubble.GameObjects;
 using System.Collections.Generic;
 using MonoGame.Extended;
+using System;
 using System;
 
 namespace PuzzleBubble;
@@ -14,7 +15,7 @@ public class PuzzleBubble : Game
     private SpriteBatch _spriteBatch;
 
     // 
-    // private List<Bubble> _bubbles; // เก็บฟองอากาศทั้งหมด
+    private List<Bubble> _bubbles; // เก็บฟองอากาศทั้งหมด
     private List<Texture2D> _bubbleTextures; // เก็บ Texture สำหรับสุ่ม
 
     Texture2D _gun; // Object
@@ -109,19 +110,44 @@ public class PuzzleBubble : Game
             data[0] = Color.Black;
             _rect.SetData(data);
         }
+
+        // โหลดไฟล์ภาพจาก Content Pipeline
+        _bubbleTextures = new List<Texture2D>
+        {
+            Content.Load<Texture2D>("b1"),
+            Content.Load<Texture2D>("b2"),
+            Content.Load<Texture2D>("b3"),
+            Content.Load<Texture2D>("br1"),
+            Content.Load<Texture2D>("br2"),
+            Content.Load<Texture2D>("br3"),
+            Content.Load<Texture2D>("r1"),
+            Content.Load<Texture2D>("r2"),
+            Content.Load<Texture2D>("r3"),
+            Content.Load<Texture2D>("y1"),
+            Content.Load<Texture2D>("y2"),
+            Content.Load<Texture2D>("y3"),
+        };
+
+        // สร้างฟองอากาศ
+        _bubbles = new List<Bubble>();
+        InitializeBubble();
     }
 
     protected override void Update(GameTime gameTime)
     {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            Exit();
+        // if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+        //     Exit();
 
-        // switch (_currentGameState)
+        MouseState state = Mouse.GetState();
+
+
+        //     switch (_currentGameState)
         // {
         //     case GameState.Start:
-        //         if (state.LeftButton == ButtonState.Pressed)
+        //         if (Mouse.GetState().LeftButton == ButtonState.Pressed)
         //         {
         //             _currentGameState = GameState.Playing;
+        //             InitializeBubble();
         //         }
         //         break;
 
@@ -134,10 +160,9 @@ public class PuzzleBubble : Game
         //         break;
 
         //     case GameState.GameOver:
-        //         if (state.LeftButton == ButtonState.Pressed)
+        //         if (Mouse.GetState().LeftButton == ButtonState.Pressed)
         //         {
         //             _currentGameState = GameState.Start;
-        //             _isGameEnded = true;
         //         }
         //         break;
         // }
@@ -215,19 +240,27 @@ public class PuzzleBubble : Game
         base.Draw(gameTime);
     }
 
-    // public void InitializeBubble(){
-    //     for (int row = 0; row < 5; row++)
-    //     {
-    //         int columns = (row % 2 == 0) ? 10 : 9; // Alternate between 10 and 9 columns
-    //         for (int col = 0; col < columns; col++)
-    //         {
-    //             Bubble newBubble = new Bubble();
-    //             newBubble.Texture = _br1; // Assuming _br1 is the texture for the bubble
-    //             newBubble.Position = new Vector2(100 + col * 50, 50 + row * 50);
-    //             _bubbles.Add(newBubble);
-    //         }
-    //     }
-    // }
+    public void InitializeBubble()
+    {
+        Random random = new Random();
+
+        for (int row = 0; row < 5; row++)
+        {
+            int columns = (row % 2 == 0) ? 10 : 9; // Switch Columns 10 - 9
+            for (int col = 0; col < columns; col++)
+            {
+                Texture2D randomTexture = _bubbleTextures[random.Next(_bubbleTextures.Count)];
+                Bubble newBubble = new Bubble(randomTexture)
+                {
+                    Position = new Vector2(65 + col * 70, 65 + row * 70) // Set Position
+                };
+
+                _bubbles.Add(newBubble); // add Bubble To List
+            }
+        }
+    }
+
+
 
     public void CurrentDisplayMode()
     {

@@ -1,146 +1,149 @@
-// using System;
-// using Microsoft.Xna.Framework;
-// using Microsoft.Xna.Framework.Graphics;
+using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
-// namespace PuzzleBubble.GameObjects {
-// 	public class Bubble : _GameObject {
-// 		public float Speed;
-// 		public float Angle;
-//         public Texture2D Texture { get; set; } // Property สำหรับเก็บ Texture
-// 		public Bubble(Texture2D texture) : base(texture) {
-			
-// 		}
+namespace PuzzleBubble.GameObjects
+{
+    public class Bubble : _GameObject
+    {
+        public float Speed { get; set; }
+        public float Angle { get; set; }
+        public Texture2D Texture { get; set; } // สำหรับเก็บ Texture ของ Bubble
+        public int GridSizeX { get; set; } = 80; // ความกว้างของช่องกริด
+        public int GridSizeY { get; set; } = 70; // ความสูงของช่องกริด
+        public int OffsetX { get; set; } = 320; // Offset สำหรับแกน X
+        public int OffsetY { get; set; } = 40;  // Offset สำหรับแกน Y
 
-// 		public override void Update(GameTime gameTime, Bubble[,] gameObjects) {
-// 			if (IsActive) {
-// 				Velocity.X = (float)Math.Cos(Angle) * Speed;
-// 				Velocity.Y = (float)Math.Sin(Angle) * Speed;
-// 				Position += Velocity * gameTime.ElapsedGameTime.Ticks / TimeSpan.TicksPerSecond;
-// 				DetectCollision(gameObjects);
-// 				if (Position.Y <= 40) {
-// 					IsActive = false;
-// 					if (Position.X > 880) {
-// 						gameObjects[0, 7] = this;
-// 						Position = new Vector2((7 * 80) + ((0 % 2) == 0 ? 320 : 360), (0 * 70) + 40);
-// 					} else if (Position.X > 800) {
-// 						gameObjects[0, 6] = this;
-// 						Position = new Vector2((6 * 80) + ((0 % 2) == 0 ? 320 : 360), (0 * 70) + 40);
-// 					} else if (Position.X > 720) {
-// 						gameObjects[0, 5] = this;
-// 						Position = new Vector2((5 * 80) + ((0 % 2) == 0 ? 320 : 360), (0 * 70) + 40);
-// 					} else if (Position.X > 640) {
-// 						gameObjects[0, 4] = this;
-// 						Position = new Vector2((4 * 80) + ((0 % 2) == 0 ? 320 : 360), (0 * 70) + 40);
-// 					} else if (Position.X > 560) {
-// 						gameObjects[0, 3] = this;
-// 						Position = new Vector2((3 * 80) + ((0 % 2) == 0 ? 320 : 360), (0 * 70) + 40);
-// 					} else if (Position.X > 480) {
-// 						gameObjects[0, 2] = this;
-// 						Position = new Vector2((2 * 80) + ((0 % 2) == 0 ? 320 : 360), (0 * 70) + 40);
-// 					} else if (Position.X > 400) {
-// 						gameObjects[0, 1] = this;
-// 						Position = new Vector2((1 * 80) + ((0 % 2) == 0 ? 320 : 360), (0 * 70) + 40);
-// 					} else if (Position.X > 320) {
-// 						gameObjects[0, 0] = this;
-// 						Position = new Vector2((0* 80) + ((0 % 2) == 0 ? 320 : 360), (0 * 70) + 40);
-// 					}
-// 					Singleton.Instance.Shooting = false;
-// 				}
+        public Bubble(Texture2D texture) : base(texture)
+        {
+        }
 
-// 				if (Position.X <= 325) {
-// 					Angle = -Angle;
-// 					Angle += MathHelper.ToRadians(180);
-// 				}
+        public override void Update(GameTime gameTime, Bubble[,] gameObjects)
+        {
+            if (!IsActive) return;
 
-// 				if (Position.X + _texture.Width >= 960) {
-// 					Angle = -Angle;
-// 					Angle += MathHelper.ToRadians(180);
-// 				}
-// 			}
-// 		}
+            // คำนวณความเร็วตามมุม
+            Velocity.X = (float)Math.Cos(Angle) * Speed;
+            Velocity.Y = (float)Math.Sin(Angle) * Speed;
+            Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-// 		private void DetectCollision(Bubble[,] gameObjects) {
-// 			for (int i = 0; i < 9; i++) {
-// 				for (int j = 0; j < 8; j++) {
-// 					if (gameObjects[i, j] != null && !gameObjects[i, j].IsActive) {
-// 						if (CheckCollision(gameObjects[i, j]) <= 70) {
-// 							if (Position.X >= gameObjects[i, j].Position.X) {
-// 								if (i % 2 == 0) {
-// 									if (j == 7) {
-// 										gameObjects[i + 1, j - 1] = this;
-// 										gameObjects[i + 1, j - 1].Position = new Vector2(((j - 1) * 80) + (((i + 1) % 2) == 0 ? 320 : 360), ((i + 1) * 70) + 40);
-// 										CheckRemoveBubble(gameObjects, color, new Vector2(j - 1, i + 1));
-// 									} else {
-// 										gameObjects[i + 1, j] = this;
-// 										gameObjects[i + 1, j].Position = new Vector2((j * 80) + (((i + 1) % 2) == 0 ? 320 : 360), ((i + 1) * 70) + 40);
-// 										CheckRemoveBubble(gameObjects, color, new Vector2(j, i + 1));
-// 									}
-// 								} else {
-// 									gameObjects[i + 1, j + 1] = this;
-// 									gameObjects[i + 1, j + 1].Position = new Vector2(((j + 1) * 80) + (((i + 1) % 2) == 0 ? 320 : 360), ((i + 1) * 70) + 40);
-// 									CheckRemoveBubble(gameObjects, color, new Vector2(j + 1, i + 1));
-// 								}
-// 							} else {
-// 								if (i % 2 == 0) {
-// 									gameObjects[i + 1, j - 1] = this;
-// 									gameObjects[i + 1, j - 1].Position = new Vector2(((j - 1) * 80) + (((i + 1) % 2) == 0 ? 320 : 360), ((i + 1) * 70) + 40);
-// 									CheckRemoveBubble(gameObjects, color, new Vector2(j - 1, i + 1));
-// 								} else {
-// 									gameObjects[(i + 1), j] = this;
-// 									gameObjects[(i + 1), j].Position = new Vector2((j * 80) + (((i + 1) % 2) == 0 ? 320 : 360), ((i + 1) * 70) + 40);
-// 									CheckRemoveBubble(gameObjects, color, new Vector2(j, i + 1));
-// 								}
-// 							}
-// 							IsActive = false;
-// 							if (Singleton.Instance.removeBubble.Count >= 3) {
-// 								Singleton.Instance.Score += Singleton.Instance.removeBubble.Count * 100;
-// 							} else if (Singleton.Instance.removeBubble.Count > 0) {
-// 								foreach (Vector2 v in Singleton.Instance.removeBubble) {
-// 									gameObjects[(int)v.Y, (int)v.X] = new Bubble(_texture) {
-// 										Name = "Bubble",
-// 										Position = new Vector2((v.X * 80) + ((v.Y % 2) == 0 ? 320 : 360), (v.Y * 70) + 40),
-// 										color = color,
-// 										IsActive = false,
-// 									};
-// 								}
-// 							}
-// 							Singleton.Instance.removeBubble.Clear();
-// 							Singleton.Instance.Shooting = false;
-// 							return;
-// 						}
+            HandleBoundaryCollision();
+            DetectCollision(gameObjects);
+        }
 
-// 					}
-// 				}
-// 			}
-// 		}
-// 		public override void Draw(SpriteBatch spriteBatch) {
-// 			spriteBatch.Draw(_texture, Position, color);
-// 			base.Draw(spriteBatch);
-// 		}
+        private void HandleBoundaryCollision()
+        {
+            // ชนขอบซ้าย
+            if (Position.X <= OffsetX)
+            {
+                ReflectAngle();
+            }
 
-// 		public int CheckCollision(Bubble other) {
-// 			return (int)Math.Sqrt(Math.Pow(Position.X - other.Position.X, 2) + Math.Pow(Position.Y - other.Position.Y, 2));
-// 		}
-// 		public void CheckRemoveBubble(Bubble[,] gameObjects, Color ColorTarget, Vector2 me) {
-// 			if ((me.X >= 0 && me.Y >= 0) && (me.X <= 7 && me.Y <= 8) && (gameObjects[(int)me.Y, (int)me.X] != null && gameObjects[(int)me.Y, (int)me.X].color == ColorTarget)) {
-// 				Singleton.Instance.removeBubble.Add(me);
-// 				gameObjects[(int)me.Y, (int)me.X] = null;
-// 			} else {
-// 				return;
-// 			}
-// 			CheckRemoveBubble(gameObjects, ColorTarget, new Vector2(me.X + 1, me.Y)); // Right
-// 			CheckRemoveBubble(gameObjects, ColorTarget, new Vector2(me.X - 1, me.Y)); // Left
-// 			if (me.Y % 2 == 0) {
-// 				CheckRemoveBubble(gameObjects, ColorTarget, new Vector2(me.X, me.Y - 1)); // Top Right
-// 				CheckRemoveBubble(gameObjects, ColorTarget, new Vector2(me.X - 1, me.Y - 1)); // Top Left
-// 				CheckRemoveBubble(gameObjects, ColorTarget, new Vector2(me.X, me.Y + 1)); // Bot Right
-// 				CheckRemoveBubble(gameObjects, ColorTarget, new Vector2(me.X - 1, me.Y + 1)); // Bot Left
-// 			} else {
-// 				CheckRemoveBubble(gameObjects, ColorTarget, new Vector2(me.X + 1, me.Y - 1)); // Top Right
-// 				CheckRemoveBubble(gameObjects, ColorTarget, new Vector2(me.X, me.Y - 1)); // Top Left
-// 				CheckRemoveBubble(gameObjects, ColorTarget, new Vector2(me.X + 1, me.Y + 1)); // Bot Right
-// 				CheckRemoveBubble(gameObjects, ColorTarget, new Vector2(me.X, me.Y + 1)); // Bot 		}
-// 			}
-// 		}
-// 	}
-// }
+            // ชนขอบขวา
+            if (Position.X + _texture.Width >= OffsetX + (GridSizeX * 8))
+            {
+                ReflectAngle();
+            }
+
+            // ชนขอบบน
+            if (Position.Y <= OffsetY)
+            {
+                IsActive = false;
+                AlignToGrid();
+            }
+        }
+
+        private void ReflectAngle()
+        {
+            Angle = -Angle;
+            Angle += MathHelper.ToRadians(180); // สะท้อนมุม
+        }
+
+        private void AlignToGrid()
+        {
+            int column = (int)((Position.X - OffsetX) / GridSizeX);
+            int row = 0; // กริดแถวบนสุด
+
+            Position = GetGridPosition(row, column);
+            Singleton.Instance.Shooting = false;
+        }
+
+        private Vector2 GetGridPosition(int row, int column)
+        {
+            return new Vector2(
+                (column * GridSizeX) + (row % 2 == 0 ? OffsetX : OffsetX + GridSizeX / 2),
+                (row * GridSizeY) + OffsetY
+            );
+        }
+
+        private void DetectCollision(Bubble[,] gameObjects)
+        {
+            for (int i = 0; i < gameObjects.GetLength(0); i++)
+            {
+                for (int j = 0; j < gameObjects.GetLength(1); j++)
+                {
+                    Bubble targetBubble = gameObjects[i, j];
+                    if (targetBubble != null && !targetBubble.IsActive)
+                    {
+                        if (CheckCollision(targetBubble) <= GridSizeY)
+                        {
+                            PlaceInGrid(gameObjects, i, j);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void PlaceInGrid(Bubble[,] gameObjects, int i, int j)
+        {
+            IsActive = false;
+
+            int newRow = i + 1;
+            int newCol = (Position.X >= gameObjects[i, j].Position.X)
+                ? (j + (i % 2 == 0 ? 0 : 1))
+                : (j - (i % 2 == 0 ? 1 : 0));
+
+            newCol = Math.Clamp(newCol, 0, gameObjects.GetLength(1) - 1);
+            gameObjects[newRow, newCol] = this;
+            Position = GetGridPosition(newRow, newCol);
+
+            CheckRemoveBubble(gameObjects, color, new Vector2(newCol, newRow));
+        }
+
+        public int CheckCollision(Bubble other)
+        {
+            return (int)Vector2.Distance(Position, other.Position);
+        }
+
+        private void CheckRemoveBubble(Bubble[,] gameObjects, Color targetColor, Vector2 gridPosition)
+        {
+            if (!IsValidGridPosition(gridPosition, gameObjects)) return;
+
+            Singleton.Instance.removeBubble.Add(gridPosition);
+            gameObjects[(int)gridPosition.Y, (int)gridPosition.X] = null;
+
+            CheckRemoveBubble(gameObjects, targetColor, gridPosition + new Vector2(1, 0)); // Right
+            CheckRemoveBubble(gameObjects, targetColor, gridPosition + new Vector2(-1, 0)); // Left
+            CheckRemoveBubble(gameObjects, targetColor, gridPosition + new Vector2(0, -1)); // Top
+            CheckRemoveBubble(gameObjects, targetColor, gridPosition + new Vector2(0, 1)); // Bottom
+        }
+
+        private bool IsValidGridPosition(Vector2 gridPosition, Bubble[,] gameObjects)
+        {
+            int x = (int)gridPosition.X;
+            int y = (int)gridPosition.Y;
+
+            return x >= 0 && y >= 0 &&
+                   x < gameObjects.GetLength(1) &&
+                   y < gameObjects.GetLength(0) &&
+                   gameObjects[y, x]?.color == color;
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(_texture, Position, color);
+            base.Draw(spriteBatch);
+        }
+    }
+}
