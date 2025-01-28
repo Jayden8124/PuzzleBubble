@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SourceFile>C:/Study-Comsci/Y3T2/COMGAME/Project_midterm/PuzzleBubble/PuzzleBubble/Content/GameFont.spritefont</SourceFile>
+  <SourceTime>2024-08-17T00:04:56+07:00</SourceTime>
+  <DestFile>C:/Study-Comsci/Y3T2/COMGAME/Project_midterm/PuzzleBubble/PuzzleBubble/Content/bin/DesktopGL/Content/GameFont.xnb</DestFile>
+  <DestTime>2025-01-27T21:50:10.1914728+07:00</DestTime>
+  <Importer>FontDescriptionImporter</Importer>
+  <ImporterTime>2024-08-17T00:05:56+07:00</ImporterTime>
+  <Processor>FontDescriptionProcessor</Processor>
+  <ProcessorTime>2024-08-17T00:05:56+07:00</ProcessorTime>
+  <Parameters>
+    <Key>PremultiplyAlpha</Key>
+    <Value>True</Value>
+  </Parameters>
+  <Parameters>
+    <Key>TextureFormat</Key>
+    <Value>Compressed</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

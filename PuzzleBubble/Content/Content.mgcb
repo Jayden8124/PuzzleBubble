@@ -13,6 +13,18 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin 1c9f7bfd1a3ef47c.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:1c9f7bfd1a3ef47c.png
+
 #begin b1.PNG
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -84,6 +96,13 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:br3.PNG
+
+#begin GameFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:GameFont.spritefont
 
 #begin gun.png
 /importer:TextureImporter

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 // using PuzzleBubble.GameObjects;
 using System.Collections.Generic;
 using MonoGame.Extended;
+using System;
 
 namespace PuzzleBubble;
 
@@ -20,16 +21,21 @@ public class PuzzleBubble : Game
     Texture2D _b1, _b2, _b3, _br1, _br2, _br3, _r1, _r2, _r3, _y1, _y2, _y3; // Color Bubble
     Texture2D _h1, _h2; // Player
     Texture2D _rect; // Play Zone
-
+    SpriteFont _font; // Font
     // Size Play Zone
-    public const int _PlayWidth = 780;
+    public const int _PlayWidth = 780;  
     public const int _PlayHeight = 915;
-    public const int _scoreboardWidth = 100;
-    public const int _scoreboardHeight = 300;
+    public const int _scoreboardWidth = 500;
+    public const int _scoreboardHeight = 100;
     public const int _barNameWidth = 39;
     public const int _barNameHeight = 338;
     public const int _pictureBossWidth = 279;
     public const int _pictureBossHeight = 367;
+
+    // test
+    int _score;
+    long _timer;
+    private Texture2D _lineTexture; // Texture for drawing lines
 
     // Status Game
     // bool _isGameEnded = false;
@@ -58,7 +64,7 @@ public class PuzzleBubble : Game
         _graphics.ApplyChanges();
 
         // TODO: Add your initialization logic here
-
+        
         base.Initialize();
     }
 
@@ -67,6 +73,12 @@ public class PuzzleBubble : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         _gun = Content.Load<Texture2D>("gun");  // Gun Texture
+        _font = Content.Load<SpriteFont>("GameFont"); // Font
+
+        // Create a 1x1 pixel texture for drawing lines
+        _lineTexture = new Texture2D(GraphicsDevice, 1, 1);
+        _lineTexture.SetData(new[] { Color.White });
+
 
         // Bubble Texture
         {
@@ -104,8 +116,6 @@ public class PuzzleBubble : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        MouseState state = Mouse.GetState();
-
         // switch (_currentGameState)
         // {
         //     case GameState.Start:
@@ -118,6 +128,9 @@ public class PuzzleBubble : Game
         //     case GameState.Playing:
         //         // Handle Playing state logic
         //         // TODO: Add your game update logic here
+        // time
+        _timer += gameTime.ElapsedGameTime.Ticks;
+
         //         break;
 
         //     case GameState.GameOver:
@@ -140,13 +153,32 @@ public class PuzzleBubble : Game
 
         // Base Background
         _spriteBatch.Draw(_rect, new Vector2(515, 65), null, Color.Black, 0f, Vector2.Zero, new Vector2(_PlayWidth, _PlayHeight), SpriteEffects.None, 0f);
-        _spriteBatch.Draw(_rect, new Vector2(1360, 100), null, Color.Black, 0f, Vector2.Zero, new Vector2(_scoreboardHeight, _scoreboardWidth), SpriteEffects.None, 0f);
-        _spriteBatch.Draw(_rect, new Vector2(1360, 220), null, Color.Black, 0f, Vector2.Zero, new Vector2(_scoreboardHeight, _scoreboardWidth), SpriteEffects.None, 0f);
+        _spriteBatch.Draw(_rect, new Vector2(1360, 100), null, Color.Black, 0f, Vector2.Zero, new Vector2(_scoreboardWidth, _scoreboardHeight), SpriteEffects.None, 0f);
+        _spriteBatch.Draw(_rect, new Vector2(1360, 220), null, Color.Black, 0f, Vector2.Zero, new Vector2(_scoreboardWidth, _scoreboardHeight), SpriteEffects.None, 0f);
         _spriteBatch.Draw(_rect, new Vector2(80, 90), null, Color.Black, 0f, Vector2.Zero, new Vector2(_barNameHeight, _barNameWidth), SpriteEffects.None, 0f);
         _spriteBatch.Draw(_rect, new Vector2(70, 165), null, Color.Black, 0f, Vector2.Zero, new Vector2(_pictureBossHeight, _pictureBossWidth), SpriteEffects.None, 0f);
         _spriteBatch.DrawCircle(new Vector2(1449, 417), 50, 100, Color.Red, 50);
-        
 
+        // SCORE Drawing
+        _spriteBatch.DrawString(_font, "SCORE: " + _score, new Vector2(1449, 266), Color.White);
+
+        // TIMER Drawing
+        _spriteBatch.DrawString(_font, "TIME: " + String.Format("{0}:{1:00}", _timer / 600000000, (_timer / 10000000) % 60),
+            new Vector2(1449, 144), Color.White);
+
+        // test mouse 
+        // Get mouse state
+        MouseState mouseState = Mouse.GetState();
+        int mouseX = mouseState.X;
+        int mouseY = mouseState.Y;
+        
+        // Draw horizontal and vertical lines
+        _spriteBatch.Draw(_lineTexture, new Rectangle(0, mouseY, _graphics.PreferredBackBufferWidth, 1), Color.Red); // Horizontal line
+        _spriteBatch.Draw(_lineTexture, new Rectangle(mouseX, 0, 1, _graphics.PreferredBackBufferHeight), Color.Red); // Vertical line
+
+        // Draw mouse coordinates
+        string coordinates = $"X: {mouseState.X}, Y: {mouseState.Y}";
+        _spriteBatch.DrawString(_font, coordinates, new Vector2(10, 10), Color.Red);
         // switch (_currentGameState)
         // {
         //     case GameState.Start:
@@ -168,7 +200,7 @@ public class PuzzleBubble : Game
         //         }
 
         //         // Draw gun
-        //         // _spriteBatch.Draw(_gun, new Vector2(900, 950), Color.White);
+        // _spriteBatch.Draw(_gun, new Vector2(900, 950), Color.White);
         //         break;
 
         //     case GameState.GameOver:
@@ -197,7 +229,8 @@ public class PuzzleBubble : Game
     //     }
     // }
 
-    public void CurrentDisplayMode(){  
+    public void CurrentDisplayMode()
+    {
         var displayMode = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
         _graphics.PreferredBackBufferWidth = displayMode.Width;
         _graphics.PreferredBackBufferHeight = displayMode.Height;
