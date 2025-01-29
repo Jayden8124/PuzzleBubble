@@ -1,76 +1,77 @@
-// using Microsoft.Xna.Framework;
-// using Microsoft.Xna.Framework.Audio;
-// using Microsoft.Xna.Framework.Graphics;
-// using Microsoft.Xna.Framework.Input;
-// using System;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using PuzzleBubble;
 
-// namespace PuzzleBubble.GameObjects {
-// 	class Gun : _GameObject {
-// 		private Random random = new Random();
-// 		private Texture2D bubbleTexture;
-// 		private Bubble BubbleOnGun;
-// 		private Color _color;
-// 		private float angle;
+namespace PuzzleBubble
+{
+    class Gun : GameObject
+    {
+        public Bubble Bubble;
+        public Keys Left, Right, Fire;
 
-// 		public SoundEffectInstance _deadSFX, _stickSFX;
-// 		public Gun(Texture2D texture, Texture2D bubble) : base(texture) {
-// 			bubbleTexture = bubble;
-// 			_color = GetRandomColor();
-// 		}
+        public Gun(Texture2D texture) : base(texture)
+        {
+        }
 
-// 		public override void Update(GameTime gameTime, Bubble[,] gameObjects) {
-// 			Singleton.Instance.MousePrevious = Singleton.Instance.MouseCurrent;
-// 			Singleton.Instance.MouseCurrent = Mouse.GetState();
-// 			if (Singleton.Instance.MouseCurrent.Y < 625) {
-// 				angle = (float)Math.Atan2((Position.Y + _texture.Height / 2) - Singleton.Instance.MouseCurrent.Y, (Position.X + _texture.Width / 2) - Singleton.Instance.MouseCurrent.X);
-// 				if (!Singleton.Instance.Shooting && Singleton.Instance.MouseCurrent.LeftButton == ButtonState.Pressed && Singleton.Instance.MousePrevious.LeftButton == ButtonState.Released) {
-// 					BubbleOnGun = new Bubble(bubbleTexture) {
-// 						Name = "Bubble",
-// 						Position = new Vector2(Singleton.Instance.Diemensions.X / 2 - bubbleTexture.Width / 2, 700 - bubbleTexture.Height),
-// 						deadSFX = _deadSFX,
-// 						stickSFX = _stickSFX,
-// 						color = _color,
-// 						IsActive = true,
-// 						Angle = angle + MathHelper.Pi,
-// 						Speed = 1000,
-// 					};
-// 					_color = GetRandomColor();
-// 					Singleton.Instance.Shooting = true;
-// 				}
-// 			}
-// 			if (Singleton.Instance.Shooting)
-// 				BubbleOnGun.Update(gameTime, gameObjects);
-// 		}
-// 		public override void Draw(SpriteBatch spriteBatch) {
-// 			spriteBatch.Draw(_texture, Position + new Vector2(50, 50), null, Color.White, angle + MathHelper.ToRadians(-90f), new Vector2(50, 50), 1.5f, SpriteEffects.None, 0f);
-// 			if (!Singleton.Instance.Shooting)
-// 				spriteBatch.Draw(bubbleTexture, new Vector2(Singleton.Instance.Diemensions.X / 2 - bubbleTexture.Width / 2, 700 - bubbleTexture.Height),_color);
-// 			else
-// 				BubbleOnGun.Draw(spriteBatch);
-// 		}
-// 		public Color GetRandomColor() {
-// 			Color _color = Color.Black;
-// 			switch (random.Next(0, 6)) {
-// 				case 0:
-// 					_color = Color.White;
-// 					break;
-// 				case 1:
-// 					_color = Color.Blue;
-// 					break;
-// 				case 2:
-// 					_color = Color.Yellow;
-// 					break;
-// 				case 3:
-// 					_color = Color.Red;
-// 					break;
-// 				case 4:
-// 					_color = Color.Green;
-// 					break;
-// 				case 5:
-// 					_color = Color.Purple;
-// 					break;
-// 			}
-// 			return _color;
-// 		}
-// 	}
-// }
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(_texture, Position, Viewport, Color.White, Rotation, new Vector2(Rectangle.Width / 2, Rectangle.Height), 1.0f, SpriteEffects.None, 0f);
+            base.Draw(spriteBatch);
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+        }
+        public override void Update(GameTime gameTime, List<GameObject> gameObjects)
+        {
+            float rotationSpeed = 3f; // Rotation speed in radians per second
+            float minRotation = MathHelper.ToRadians(-45); // Allow rotation to -90 degrees
+            float maxRotation = MathHelper.ToRadians(45);  // Allow rotation to 90 degrees
+
+            KeyboardState currentKeyState = Keyboard.GetState();
+
+            // Rotate left when Left arrow is pressed
+            if (currentKeyState.IsKeyDown(Keys.Left))
+            {
+                Rotation -= rotationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            // Rotate right when Right arrow is pressed
+            if (currentKeyState.IsKeyDown(Keys.Right))
+            {
+                Rotation += rotationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+
+            // Clamp rotation within range
+            Rotation = MathHelper.Clamp(Rotation, minRotation, maxRotation);
+
+            // Fire bubble when Space key is pressed
+            if (Singleton.Instance.CurrentKey.IsKeyDown(Fire) &&
+                Singleton.Instance.PreviousKey != Singleton.Instance.CurrentKey)
+            {
+                var newBubble = Bubble.Clone() as Bubble;
+                Vector2 gunTipPosition = new Vector2(
+         Position.X + (float)Math.Cos(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight + 60),
+    Position.Y + (float)Math.Sin(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight + 60));
+
+                // Set bubble's initial position and angle
+                newBubble.Position = gunTipPosition;
+                newBubble.Velocity = new Vector2((float)Math.Cos(Rotation), (float)Math.Sin(Rotation)) * 500;
+                newBubble.Reset();
+                gameObjects.Add(newBubble);
+            }
+
+            // Update previous key state
+            Singleton.Instance.PreviousKey = currentKeyState;
+
+            base.Update(gameTime, gameObjects);
+        }
+
+    }
+}
