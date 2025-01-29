@@ -15,9 +15,16 @@ namespace PuzzleBubble
         public const int GunWIDTH = 300;
         public const int GunHeight = 150;
 
+        public const int PlayAreaWidth = 1920;
+        public const int PlayAreaHeight = 1080;
+
+        public const int BubbleWidth = 70;
+        public const int BubbleHeight = 70;
+
         public int BubbleLeft;
 
         public int Score;
+        public long Timer;
         public int Life;
 
         public Random Random;

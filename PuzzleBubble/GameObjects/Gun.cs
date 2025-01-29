@@ -57,12 +57,13 @@ namespace PuzzleBubble
             {
                 var newBubble = Bubble.Clone() as Bubble;
                 Vector2 gunTipPosition = new Vector2(
-         Position.X + (float)Math.Cos(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight + 60),
-    Position.Y + (float)Math.Sin(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight + 60));
+            Position.X + (float)Math.Cos(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight + 60),
+            Position.Y + (float)Math.Sin(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight + 60));
 
                 // Set bubble's initial position and angle
                 newBubble.Position = gunTipPosition;
-                newBubble.Velocity = new Vector2((float)Math.Cos(Rotation), (float)Math.Sin(Rotation)) * 500;
+                newBubble.Velocity = new Vector2((float)Math.Cos(Rotation), (float)Math.Sin(Rotation)) * 50;
+                newBubble.Angle = -Rotation;
                 newBubble.Reset();
                 gameObjects.Add(newBubble);
             }
