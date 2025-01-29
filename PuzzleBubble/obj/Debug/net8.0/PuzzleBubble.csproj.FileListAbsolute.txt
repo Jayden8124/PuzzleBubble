@@ -128,3 +128,4 @@ C:\Study-Comsci\Y3T2\COMGAME\Project_midterm\PuzzleBubble\PuzzleBubble\obj\Debug
 C:\Study-Comsci\Y3T2\COMGAME\Project_midterm\PuzzleBubble\PuzzleBubble\obj\Debug\net8.0\PuzzleBubble.genruntimeconfig.cache
 C:\Study-Comsci\Y3T2\COMGAME\Project_midterm\PuzzleBubble\PuzzleBubble\obj\Debug\net8.0\ref\PuzzleBubble.dll
 C:\Study-Comsci\Y3T2\COMGAME\Project_midterm\PuzzleBubble\PuzzleBubble\bin\Debug\net8.0\Content\1c9f7bfd1a3ef47c.xnb
+C:\Study-Comsci\Y3T2\COMGAME\Project_midterm\PuzzleBubble\PuzzleBubble\bin\Debug\net8.0\Content\Sprite.xnb
