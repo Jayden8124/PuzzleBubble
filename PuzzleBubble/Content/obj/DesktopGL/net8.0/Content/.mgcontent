@@ -4,8 +4,8 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Study-Comsci/Y3T2/COMGAME/Project_midterm/PuzzleBubble/PuzzleBubble/Content/GameFont.spritefont</File>
-    <File>C:/Study-Comsci/Y3T2/COMGAME/Project_midterm/PuzzleBubble/PuzzleBubble/Content/SpriteSheet.png</File>
+    <File>/Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/Content/GameFont.spritefont</File>
+    <File>/Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/Content/SpriteSheet.png</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />

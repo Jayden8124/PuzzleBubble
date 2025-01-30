@@ -1,12 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using PuzzleBubble;
 
 namespace PuzzleBubble
 {
@@ -35,15 +31,15 @@ namespace PuzzleBubble
             float minRotation = MathHelper.ToRadians(-45); // Allow rotation to -90 degrees
             float maxRotation = MathHelper.ToRadians(45);  // Allow rotation to 90 degrees
 
-            KeyboardState currentKeyState = Keyboard.GetState();
+            KeyboardState currentKeyState = Keyboard.GetState(); // Get All Keyboard State
 
             // Rotate left when Left arrow is pressed
-            if (currentKeyState.IsKeyDown(Keys.Left))
+            if (currentKeyState.IsKeyDown(Left))
             {
                 Rotation -= rotationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
             // Rotate right when Right arrow is pressed
-            if (currentKeyState.IsKeyDown(Keys.Right))
+            if (currentKeyState.IsKeyDown(Right))
             {
                 Rotation += rotationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
@@ -57,8 +53,8 @@ namespace PuzzleBubble
             {
                 var newBubble = Bubble.Clone() as Bubble;
                 Vector2 gunTipPosition = new Vector2(
-            Position.X + (float)Math.Cos(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight + 60),
-            Position.Y + (float)Math.Sin(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight + 60));
+                Position.X + (float)Math.Cos(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight + 60),
+                Position.Y + (float)Math.Sin(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight + 60));
 
                 // Set bubble's initial position and angle
                 newBubble.Position = gunTipPosition;

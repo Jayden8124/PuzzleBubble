@@ -1,12 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using PuzzleBubble;
 
 namespace PuzzleBubble
 {
@@ -56,7 +51,7 @@ namespace PuzzleBubble
                 }
             }
 
-            Position = new Vector2(newX, newY);
+            Position = new Vector2(newX, 72);
 
             base.Update(gameTime, gameObjects);
         }
