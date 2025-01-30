@@ -8,21 +8,32 @@ namespace PuzzleBubble
 {
     class Gun : GameObject
     {
-        public Bubble Bubble;
+        public BubbleBullet bubbleBulletYellow, bubbleBulletBlue, bubbleBulletBrown, bubbleBulletBlack, bubbleBulletRed, currentBubbleBullet, nextBubbleBullet;
         public Keys Left, Right, Fire;
+        private float fireDelay = 0.5f;
+        private float timeSinceLastShot = 0f;
+        private BubbleBullet previewBullet;
 
         public Gun(Texture2D texture) : base(texture)
         {
+            previewBullet = new BubbleBullet(texture);
+            previewBullet.IsActive = false;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            if (previewBullet != null)
+        {
+            previewBullet.Draw(spriteBatch);
+        }
             spriteBatch.Draw(_texture, Position, Viewport, Color.White, Rotation, new Vector2(Rectangle.Width / 2, Rectangle.Height), 1.0f, SpriteEffects.None, 0f);
             base.Draw(spriteBatch);
         }
 
-        public override void Reset()
+        public override void Reset()        
         {
+            timeSinceLastShot = 0f;
+
             base.Reset();
         }
         public override void Update(GameTime gameTime, List<GameObject> gameObjects)
@@ -36,12 +47,12 @@ namespace PuzzleBubble
             // Rotate left when Left arrow is pressed
             if (currentKeyState.IsKeyDown(Left))
             {
-                Rotation -= rotationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Rotation -= rotationSpeed * gameTime.ElapsedGameTime.Ticks / TimeSpan.TicksPerSecond;
             }
             // Rotate right when Right arrow is pressed
             if (currentKeyState.IsKeyDown(Right))
             {
-                Rotation += rotationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Rotation += rotationSpeed * gameTime.ElapsedGameTime.Ticks / TimeSpan.TicksPerSecond;
             }
 
             // Clamp rotation within range
@@ -49,53 +60,72 @@ namespace PuzzleBubble
 
             // Fire bubble when Space key is pressed
             if (Singleton.Instance.CurrentKey.IsKeyDown(Fire) &&
-                Singleton.Instance.PreviousKey != Singleton.Instance.CurrentKey)
+                Singleton.Instance.PreviousKey != Singleton.Instance.CurrentKey &&
+                timeSinceLastShot >= fireDelay)
             {
-                var newBubble = Bubble.Clone() as Bubble;
-                Vector2 gunTipPosition = new Vector2(
-                Position.X + (float)Math.Cos(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight + 60),
-                Position.Y + (float)Math.Sin(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight + 60));
-
-                // Set bubble's initial position and angle
-                newBubble.Position = gunTipPosition;
-                newBubble.Velocity = new Vector2((float)Math.Cos(Rotation), (float)Math.Sin(Rotation)) * 50;
-                newBubble.Angle = -Rotation;
-                newBubble.Reset();
-                gameObjects.Add(newBubble);
+                ChangeBubbleBullet();
+                FireBullet(gameObjects);
+                timeSinceLastShot = 0f;
+                //_audioManager.Play("BubbleShot");
+                currentBubbleBullet = nextBubbleBullet;
             }
+
+            timeSinceLastShot += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // Update previous key state
             Singleton.Instance.PreviousKey = currentKeyState;
 
+            UpdatePreviewBulletPosition();
+    
             base.Update(gameTime, gameObjects);
+
+            gameObjects.RemoveAll(obj => !obj.IsActive);
+
         }
-    }
-
-    public void stupid()
+        public void UpdatePreviewBulletPosition()
     {
-        currentBubble = new Bubble(BubblePuzzleTexture)
+        
+        Vector2 gunTipPosition = new Vector2(
+            Position.X + (float)Math.Cos(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight + 60),
+            Position.Y + (float)Math.Sin(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight + 60)
+        );
+
+        previewBullet.Position = gunTipPosition;
+        previewBullet.Velocity = new Vector2((float)Math.Cos(Rotation), (float)Math.Sin(Rotation)) * 50;
+        previewBullet.Angle = -Rotation;
+    }
+        public void FireBullet(List<GameObject> gameObjects)
+        {
+            // Clone currentBubbleBullet to create a new instance
+            var newBubble = currentBubbleBullet.Clone() as BubbleBullet;
+
+            Vector2 gunTipPosition = new Vector2(
+                Position.X + (float)Math.Cos(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight + 60),
+                Position.Y + (float)Math.Sin(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight + 60)
+        );
+
+            // ตั้งค่าตำแหน่งของลูกกระสุน
+            newBubble.Position = gunTipPosition;
+            newBubble.Velocity = new Vector2((float)Math.Cos(Rotation), (float)Math.Sin(Rotation)) * 50;
+            newBubble.Angle = -Rotation;
+
+            newBubble.Reset();
+            gameObjects.Add(newBubble);
+            previewBullet.IsActive = false;
+        }
+
+        public void ChangeBubbleBullet()
+        {
+            // Randomly select a bubble type
+            BubbleBullet[] bubbleBullets = { bubbleBulletYellow, bubbleBulletBlue, bubbleBulletBrown, bubbleBulletBlack, bubbleBulletRed };
+            nextBubbleBullet = bubbleBullets[Singleton.Instance.Random.Next(bubbleBullets.Length)];
+
+            if (currentBubbleBullet == null)
             {
-                Position = new Vector2(Singleton.GAMEWIDTH / 2f * Singleton.TILESIZE, -2 * Singleton.TILESIZE)
-            };
-            _currentPiece.Reset();
+                currentBubbleBullet = bubbleBulletYellow;
+            }
+            previewBullet.IsActive = true;
+        }
 
-            _nextPiece = new Tetromino(BubblePuzzleTexture)
-            {
-                Position = new Vector2((Singleton.GAMEWIDTH + 2) * Singleton.TILESIZE, 4 * Singleton.TILESIZE)
-            };
-            _nextPiece.Reset();
-
-
-// change current piece to next piece
-                        _currentPiece = _nextPiece;
-                        _currentPiece.Position = new Vector2((Singleton.GAMEWIDTH / 2f) * Singleton.TILESIZE,
-                            -2 * Singleton.TILESIZE);
-
-                        _nextPiece = new Tetromino(BubblePuzzleTexture)
-                        {
-                            Position = new Vector2((Singleton.GAMEWIDTH + 2) * Singleton.TILESIZE,
-                                4 * Singleton.TILESIZE)
-                        };
-                        _nextPiece.Reset();
     }
 }

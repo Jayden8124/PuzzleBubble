@@ -6,6 +6,8 @@ using System.Collections.Generic;
 
 namespace PuzzleBubble;
 
+//_audioManager.Load(Content, "Name", "Location");
+
 public class MainScene : Game
 {
     private GraphicsDeviceManager _graphics;
@@ -108,6 +110,7 @@ public class MainScene : Game
 
         base.Update(gameTime);
     }
+        
 
     protected override void Draw(GameTime gameTime)
     {
@@ -170,7 +173,7 @@ public class MainScene : Game
         Singleton.Instance.Random = new System.Random();
 
 
-        Texture2D BubblePuzzleTexture = Content.Load<Texture2D>("SpriteSheet");
+        Texture2D BubblePuzzleTexture = Content.Load<Texture2D>("Sprite2");
 
         // Reset the game objects
         _gameObjects.Clear();
@@ -179,14 +182,44 @@ public class MainScene : Game
         _gameObjects.Add(new Gun(BubblePuzzleTexture)
         {
             Name = "Gun",
-            Viewport = new Rectangle(20, 798, 300, 150),
+            Viewport = new Rectangle(8, 789, 104, 210),
             Position = new Vector2((Singleton.PlayWidth / 2) + 515, Singleton.PlayHeight + 130),
             Left = Keys.Left,
             Right = Keys.Right,
             Fire = Keys.Space,
+            bubbleBulletYellow = new BubbleBullet(BubblePuzzleTexture)
+            {
+                Name = "BubbleBulletYellow",
+                Viewport = new Rectangle(21, 21, 70, 70),
+                Velocity = new Vector2(0, 60f),
+            },
+            bubbleBulletBlue = new BubbleBullet(BubblePuzzleTexture)
+            {
+                Name = "BubbleBulletBlue",
+                Viewport = new Rectangle(22, 132, 70, 70),
+                Velocity = new Vector2(0, 60f),
+            },
+            bubbleBulletBrown = new BubbleBullet(BubblePuzzleTexture)
+            {
+                Name = "BubbleBulletBrown",
+                Viewport = new Rectangle(20, 350, 70, 70),
+                Velocity = new Vector2(0, 60f),
+            },
+            bubbleBulletBlack = new BubbleBullet(BubblePuzzleTexture)
+            {
+                Name = "BubbleBulletBlack",
+                Viewport = new Rectangle(20, 460, 70, 70),
+                Velocity = new Vector2(0, 60f),
+            },
+            bubbleBulletRed = new BubbleBullet(BubblePuzzleTexture)
+            {
+                Name = "BubbleBulletRed",
+                Viewport = new Rectangle(20, 240, 70, 70),
+                Velocity = new Vector2(0, 60f),
+            }
         });
 
-        ResetBubble();
+        // ResetBubble();
 
         // Reset All Objects
         foreach (GameObject s in _gameObjects)

@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PuzzleBubble
 {
-    class BubbleGrid : GameObject
+    class BubbleGrid : Bubble
     {
         public int Score;
         public float Speed;

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>/Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/Content/gun.png</SourceFile>
-  <SourceTime>2025-01-30T15:42:12.3318531+07:00</SourceTime>
-  <DestFile>/Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/Content/bin/DesktopGL/Content/gun.xnb</DestFile>
-  <DestTime>2025-01-30T15:58:44.0536862+07:00</DestTime>
+  <SourceFile>C:/Study-Comsci/Y3T2/COMGAME/Project_midterm/PuzzleBubble/PuzzleBubble/Content/gun.png</SourceFile>
+  <SourceTime>2025-01-30T15:39:20.168982+07:00</SourceTime>
+  <DestFile>C:/Study-Comsci/Y3T2/COMGAME/Project_midterm/PuzzleBubble/PuzzleBubble/Content/bin/DesktopGL/Content/gun.xnb</DestFile>
+  <DestTime>2025-01-30T17:58:55.2792573+07:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2024-08-17T00:05:56+07:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

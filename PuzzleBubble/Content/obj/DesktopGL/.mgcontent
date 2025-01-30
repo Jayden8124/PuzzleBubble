@@ -7,9 +7,11 @@
     <File>c:/Study-Comsci/Y3T2/COMGAME/Project_midterm/PuzzleBubble/PuzzleBubble/Content/bg.png</File>
     <File>c:/Study-Comsci/Y3T2/COMGAME/Project_midterm/PuzzleBubble/PuzzleBubble/Content/GameFont.spritefont</File>
     <File>c:/Study-Comsci/Y3T2/COMGAME/Project_midterm/PuzzleBubble/PuzzleBubble/Content/gun.png</File>
+    <File>c:/Study-Comsci/Y3T2/COMGAME/Project_midterm/PuzzleBubble/PuzzleBubble/Content/Sprite2.png</File>
     <File>c:/Study-Comsci/Y3T2/COMGAME/Project_midterm/PuzzleBubble/PuzzleBubble/Content/SpriteSheet.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
