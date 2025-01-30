@@ -85,7 +85,7 @@ public class MainScene : Game
                 }
                 if (Singleton.Instance.BubbleLeft <= 0)
                 {
-                    ResetBubble();
+                    // ResetBubble();
                     foreach (GameObject s in _gameObjects)
                     {
                         if (s is Bubble)

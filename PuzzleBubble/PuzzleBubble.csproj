@@ -31,4 +31,7 @@
     <Message Text="Restoring dotnet tools" Importance="High" />
     <Exec Command="dotnet tool restore" />
   </Target>
+  <ItemGroup>
+  <None Include="/opt/homebrew/lib/libSDL2-2.0.0.dylib" Pack="true" CopyToOutputDirectory="PreserveNewest" />
+</ItemGroup>
 </Project>
