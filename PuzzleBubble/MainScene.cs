@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using System;
 using System.Collections.Generic;
 
@@ -44,7 +45,7 @@ public class MainScene : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         _font = Content.Load<SpriteFont>("GameFont");
 
-        _background = Content.Load<Texture2D>("bg");
+        _background = Content.Load<Texture2D>("BG_Sprite");
 
         // Rectangle for drawing a background
         _rect = new Texture2D(GraphicsDevice, 1, 1);
@@ -110,7 +111,7 @@ public class MainScene : Game
 
         base.Update(gameTime);
     }
-        
+
 
     protected override void Draw(GameTime gameTime)
     {
@@ -119,12 +120,18 @@ public class MainScene : Game
         _spriteBatch.Begin();
 
         // Base Background
-        _spriteBatch.Draw(_background, new Vector2(0, 0), new Rectangle(1, 203, 1921, 1081), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f);
-        // _spriteBatch.Draw(_rect, new Vector2(1360, 100), null, Color.Black, 0f, Vector2.Zero, new Vector2(Singleton.scoreboardHeight, Singleton.scoreboardWidth), SpriteEffects.None, 0f);
-        // _spriteBatch.Draw(_rect, new Vector2(1360, 220), null, Color.Black, 0f, Vector2.Zero, new Vector2(Singleton.scoreboardHeight, Singleton.scoreboardWidth), SpriteEffects.None, 0f);
-        // _spriteBatch.Draw(_rect, new Vector2(80, 90), null, Color.Black, 0f, Vector2.Zero, new Vector2(Singleton.barNameHeight, Singleton.barNameWidth), SpriteEffects.None, 0f);
-        // _spriteBatch.Draw(_rect, new Vector2(70, 165), null, Color.Black, 0f, Vector2.Zero, new Vector2(Singleton.pictureBossHeight, Singleton.pictureBossWidth), SpriteEffects.None, 0f);
-        // _spriteBatch.Draw(_rect, new Vector2(515, 980), null, Color.White, 0f, Vector2.Zero, new Vector2(Singleton.GunBaseWidth, Singleton.GunBaseHeight), SpriteEffects.None, 0f);
+        _spriteBatch.Draw(_background, new Vector2(0, 0), new Rectangle(9, 2615, 1921, 1081), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f); // Background
+        _spriteBatch.Draw(_background, new Vector2(1400, 511), new Rectangle(11, 322, 425, 100), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f); // Scoreboard
+        _spriteBatch.Draw(_background, new Vector2(1400, 631), new Rectangle(9, 196, 425, 100), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f); // Time
+        // _spriteBatch.Draw(_background, new Vector2(83, 92), new Rectangle(9, 196, 425, 100), Color.White, 0f, Vector2.Zero, new Vector2(0.8f, 0.39f), SpriteEffects.None, 0f); // Name Bar
+        _spriteBatch.Draw(_background, new Vector2(40, 550), new Rectangle(26, 977, 426, 520), Color.White, 0f, Vector2.Zero, new Vector2(0.9f, 0.9f), SpriteEffects.None, 0f); // Island & Tree
+        _spriteBatch.Draw(_background, new Vector2(1708, 999), new Rectangle(159, 20, 50, 50), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f); // Yellow Button
+        _spriteBatch.Draw(_background, new Vector2(1770, 999), new Rectangle(89, 20, 50, 50), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f); // Red Button
+        _spriteBatch.Draw(_background, new Vector2(1832, 999), new Rectangle(18, 20, 50, 50), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f); // Green Button
+        _spriteBatch.Draw(_rect, new Vector2(515, 65), null, Color.LightGray /* * 0.5f for transparent*/, 0f, Vector2.Zero, new Vector2(Singleton.PlayWidth, Singleton.PlayHeight), SpriteEffects.None, 0f); // Play Area
+        _spriteBatch.Draw(_rect, new Vector2(515, 980), null, Color.BurlyWood, 0f, Vector2.Zero, new Vector2(Singleton.PlayWidth, 100), SpriteEffects.None, 0f); // Under Play Area
+        DrawRectangleWithOutline(_spriteBatch, _rect, new Rectangle(515, 65, Singleton.PlayWidth, Singleton.PlayHeight), Color.Black, 5); // Play Area Outline
+
 
         _numObjects = _gameObjects.Count;
 
@@ -144,8 +151,8 @@ public class MainScene : Game
 
         // Font Score & Time
         Vector2 fontSize = _font.MeasureString("Score: " + Singleton.Instance.Score.ToString());
-        _spriteBatch.DrawString(_font, "Score: " + Singleton.Instance.Score.ToString(), new Vector2(1411, 137), Color.White);
-        _spriteBatch.DrawString(_font, "TIME: " + String.Format("{0}:{1:00}", Singleton.Instance.Timer / 600000000, Singleton.Instance.Timer / 10000000 % 60), new Vector2(1411, 260), Color.White);
+        _spriteBatch.DrawString(_font, "Score: " + Singleton.Instance.Score.ToString(), new Vector2(1460, 545), Color.White);
+        _spriteBatch.DrawString(_font, "TIME: " + String.Format("{0}:{1:00}", Singleton.Instance.Timer / 600000000, Singleton.Instance.Timer / 10000000 % 60), new Vector2(1460, 665), Color.White);
 
 
         // Draw Gameover in the middle of the screen
@@ -352,4 +359,13 @@ public class MainScene : Game
     //         _gameObjects.Add(clone);
     //     }
     // }
+
+    protected void DrawRectangleWithOutline(SpriteBatch spriteBatch, Texture2D pixel, Rectangle rect, Color outlineColor, int outlineThickness)
+    {
+        // Draw Outline
+        spriteBatch.Draw(pixel, new Rectangle(rect.X, rect.Y, rect.Width, outlineThickness), outlineColor); // Up
+        spriteBatch.Draw(pixel, new Rectangle(rect.X, rect.Y, outlineThickness, rect.Height), outlineColor); // Left
+        spriteBatch.Draw(pixel, new Rectangle(rect.X + rect.Width - outlineThickness, rect.Y, outlineThickness, rect.Height), outlineColor); // Right
+        spriteBatch.Draw(pixel, new Rectangle(rect.X, rect.Y + rect.Height - outlineThickness, rect.Width, outlineThickness), outlineColor); // Down
+    }
 }

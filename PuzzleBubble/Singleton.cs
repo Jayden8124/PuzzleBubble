@@ -27,14 +27,6 @@ namespace PuzzleBubble
         // Background Size
         public const int PlayWidth = 780;
         public const int PlayHeight = 915;
-        public const int scoreboardWidth = 100;
-        public const int scoreboardHeight = 300;
-        public const int barNameWidth = 39;
-        public const int barNameHeight = 338;
-        public const int pictureBossWidth = 279;
-        public const int pictureBossHeight = 367;
-        public const int GunBaseWidth = 780;
-        public const int GunBaseHeight = 100; 
 
         public Random Random;
 
