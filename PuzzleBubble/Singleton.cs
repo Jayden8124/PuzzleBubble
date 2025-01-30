@@ -47,6 +47,7 @@ namespace PuzzleBubble
         }
         public GameState CurrentGameState;
 
+        
         // Keyboard State
         public KeyboardState PreviousKey, CurrentKey;
 

@@ -12,7 +12,7 @@ public class MainScene : Game
     private SpriteBatch _spriteBatch;
 
     SpriteFont _font;
-    Texture2D _rect;
+    Texture2D _rect, _background;
 
     List<GameObject> _gameObjects;
     List<Bubble> _bubbles;
@@ -41,6 +41,8 @@ public class MainScene : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         _font = Content.Load<SpriteFont>("GameFont");
+
+        _background = Content.Load<Texture2D>("bg");
 
         // Rectangle for drawing a background
         _rect = new Texture2D(GraphicsDevice, 1, 1);
@@ -114,12 +116,12 @@ public class MainScene : Game
         _spriteBatch.Begin();
 
         // Base Background
-        _spriteBatch.Draw(_rect, new Vector2(515, 65), null, Color.Black, 0f, Vector2.Zero, new Vector2(Singleton.PlayWidth, Singleton.PlayHeight), SpriteEffects.None, 0f);
-        _spriteBatch.Draw(_rect, new Vector2(1360, 100), null, Color.Black, 0f, Vector2.Zero, new Vector2(Singleton.scoreboardHeight, Singleton.scoreboardWidth), SpriteEffects.None, 0f);
-        _spriteBatch.Draw(_rect, new Vector2(1360, 220), null, Color.Black, 0f, Vector2.Zero, new Vector2(Singleton.scoreboardHeight, Singleton.scoreboardWidth), SpriteEffects.None, 0f);
-        _spriteBatch.Draw(_rect, new Vector2(80, 90), null, Color.Black, 0f, Vector2.Zero, new Vector2(Singleton.barNameHeight, Singleton.barNameWidth), SpriteEffects.None, 0f);
-        _spriteBatch.Draw(_rect, new Vector2(70, 165), null, Color.Black, 0f, Vector2.Zero, new Vector2(Singleton.pictureBossHeight, Singleton.pictureBossWidth), SpriteEffects.None, 0f);
-        _spriteBatch.Draw(_rect, new Vector2(515, 980), null, Color.White, 0f, Vector2.Zero, new Vector2(Singleton.GunBaseWidth, Singleton.GunBaseHeight), SpriteEffects.None, 0f);
+        _spriteBatch.Draw(_background, new Vector2(0, 0), new Rectangle(1, 203, 1921, 1081), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f);
+        // _spriteBatch.Draw(_rect, new Vector2(1360, 100), null, Color.Black, 0f, Vector2.Zero, new Vector2(Singleton.scoreboardHeight, Singleton.scoreboardWidth), SpriteEffects.None, 0f);
+        // _spriteBatch.Draw(_rect, new Vector2(1360, 220), null, Color.Black, 0f, Vector2.Zero, new Vector2(Singleton.scoreboardHeight, Singleton.scoreboardWidth), SpriteEffects.None, 0f);
+        // _spriteBatch.Draw(_rect, new Vector2(80, 90), null, Color.Black, 0f, Vector2.Zero, new Vector2(Singleton.barNameHeight, Singleton.barNameWidth), SpriteEffects.None, 0f);
+        // _spriteBatch.Draw(_rect, new Vector2(70, 165), null, Color.Black, 0f, Vector2.Zero, new Vector2(Singleton.pictureBossHeight, Singleton.pictureBossWidth), SpriteEffects.None, 0f);
+        // _spriteBatch.Draw(_rect, new Vector2(515, 980), null, Color.White, 0f, Vector2.Zero, new Vector2(Singleton.GunBaseWidth, Singleton.GunBaseHeight), SpriteEffects.None, 0f);
 
         _numObjects = _gameObjects.Count;
 
@@ -170,7 +172,7 @@ public class MainScene : Game
 
         Texture2D BubblePuzzleTexture = Content.Load<Texture2D>("SpriteSheet");
 
-         // Reset the game objects
+        // Reset the game objects
         _gameObjects.Clear();
 
         // Add Gun
@@ -182,12 +184,6 @@ public class MainScene : Game
             Left = Keys.Left,
             Right = Keys.Right,
             Fire = Keys.Space,
-            Bubble = new Bubble(BubblePuzzleTexture) // Bubble has created when Gun is fired
-            {
-                Name = "BubblePlayer",
-                Viewport = new Rectangle(22, 132, 70, 70),
-                Velocity = new Vector2(0, -60f)
-            }
         });
 
         ResetBubble();
@@ -237,7 +233,7 @@ public class MainScene : Game
             for (int col = 0; col < columns; col++)
             {
                 var clone = bg.Clone() as BubbleGrid;
-                clone.Position = new Vector2(560 + (70 * col) + (35 * (row % 2)),60 * row); // Between Bubble
+                clone.Position = new Vector2(560 + (70 * col) + (35 * (row % 2)), 60 * row); // Between Bubble
                 _gameObjects.Add(clone);
             }
         }

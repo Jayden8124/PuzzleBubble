@@ -56,3 +56,5 @@ C:/Study-Comsci/Y3T2/COMGAME/Project_midterm/PuzzleBubble/PuzzleBubble/bin/Debug
 C:/Study-Comsci/Y3T2/COMGAME/Project_midterm/PuzzleBubble/PuzzleBubble/bin/Debug/net8.0/Content/SpriteSheet.xnb
 /Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/bin/Debug/net8.0/Content/GameFont.xnb
 /Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/bin/Debug/net8.0/Content/SpriteSheet.xnb
+/Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/bin/Debug/net8.0/Content/bg.xnb
+/Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/bin/Debug/net8.0/Content/gun.xnb
