@@ -21,20 +21,21 @@ namespace PuzzleBubble
             base.Draw(spriteBatch);
         }
 
-        public override void Reset()
-        {
-            Speed = 300f;
-            DistanceMoved = 0;
-            base.Reset();
-        }
+        
         public override void Update(GameTime gameTime, List<GameObject> gameObjects)
         {
             DistanceMoved += Math.Abs(Velocity.Y * gameTime.ElapsedGameTime.Ticks / TimeSpan.TicksPerSecond);
-
-            if (DistanceMoved >= Singleton.SCREENHEIGHT)
+            
+            if (DistanceMoved >= Singleton.SCREENHEIGHT - 300)
             {
                 IsActive = false;
             }
+            // if(Position.Y >= Singleton.SCREENHEIGHT -65)
+            // {
+            //     IsActive = false;
+            // } 
+
+            Console.WriteLine($"DistanceMoved: {DistanceMoved}, Position: {Position.Y}, IsActive: {IsActive}");
 
             Velocity.X = (float)-Math.Sin(Angle) * Speed;
             Velocity.Y = (float)-Math.Cos(Angle) * Speed;
@@ -51,8 +52,14 @@ namespace PuzzleBubble
             //     Position.Y = 0;
             //     // Velocity = Vector2.Zero;
             // }
-            Velocity = Vector2.Zero;
+            // Velocity = Vector2.Zero;
             base.Update(gameTime, gameObjects);
+        }
+        public override void Reset()
+        {
+            Speed = 300f;
+            // DistanceMoved = 0;
+            base.Reset();
         }
     }
 }

@@ -9,7 +9,7 @@ namespace PuzzleBubble
     {
         public int Score;
         public float Speed;
-        public float DistanceMoved = 0;
+        public float DistanceMoved;
 
         public BubbleGrid(Texture2D texture) : base(texture)
         {
@@ -31,7 +31,7 @@ namespace PuzzleBubble
         {
             // if (gameTime.ElapsedGameTime.Ticks / TimeSpan.TicksPerSecond == 3)
             // {
-                // Velocity.Y = Speed;
+            // Velocity.Y = Speed;
             // }
 
             DistanceMoved += Math.Abs(Velocity.X * gameTime.ElapsedGameTime.Ticks / TimeSpan.TicksPerSecond);
@@ -41,7 +41,7 @@ namespace PuzzleBubble
             {
                 DistanceMoved = 0;
 
-                newY += 30;
+                newY += 70;
                 Speed *= 1.2f;
 
                 if (newY >= 900)
@@ -51,9 +51,20 @@ namespace PuzzleBubble
                 }
             }
 
-            Position = new Vector2(newX, 72);
+            Position = new Vector2(newX, newY);
 
             base.Update(gameTime, gameObjects);
         }
+
+        // public void MoveDown()
+        // {
+        //     foreach (var gameObject in Singleton.Instance.GameObjects)
+        //     {
+        //         if (gameObject is BubbleGrid bubble)
+        //         {
+        //             bubble.Position = new Vector2(bubble.Position.X, bubble.Position.Y + Singleton.SizeBubbleHeight);
+        //         }
+        //     }
+        // }
     }
 }

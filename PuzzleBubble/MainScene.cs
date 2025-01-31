@@ -18,9 +18,8 @@ public class MainScene : Game
     Texture2D _rect, _background;
 
     List<GameObject> _gameObjects;
-    List<Bubble> _bubbles;
-
     private int _numObjects;
+    private int totalRows = 5;
 
     public MainScene()
     {
@@ -61,7 +60,7 @@ public class MainScene : Game
 
         //update
         _numObjects = _gameObjects.Count;
-        // Singleton.Instance.CurrentGameState = Singleton.GameState.GameOver;
+        // Singleton.Instance.CurrentGameState = Singleton.GameState.GamePlaying;
 
         switch (Singleton.Instance.CurrentGameState)
         {
@@ -86,7 +85,9 @@ public class MainScene : Game
                 }
                 if (Singleton.Instance.BubbleLeft <= 0)
                 {
-                    // ResetBubble();
+                    ResetBubble();
+
+                    Console.WriteLine("Resetting Bubble123");
                     foreach (GameObject s in _gameObjects)
                     {
                         if (s is Bubble)
@@ -137,7 +138,22 @@ public class MainScene : Game
 
         for (int i = 0; i < _numObjects; i++)
         {
+            if (_gameObjects[i] is BubbleGrid)
+            {
+                Console.WriteLine($"Drawing BubbleGrid: {_gameObjects[i].Name}"); // Debug
+            }
             _gameObjects[i].Draw(_spriteBatch);
+        }
+
+        { // Add new row of bubbles
+            Singleton.Instance.Timer += gameTime.ElapsedGameTime.Ticks;
+
+            if (Singleton.Instance.Timer >= TimeSpan.TicksPerSecond * 10)
+            {
+                Singleton.Instance.Timer = 0;
+                MoveBubblesDown();
+                AddNewRow();
+            }
         }
 
         // Get Mouse State X,Y
@@ -226,139 +242,153 @@ public class MainScene : Game
             }
         });
 
-        // ResetBubble();
+        ResetBubble();
 
         // Reset All Objects
         foreach (GameObject s in _gameObjects)
         {
+            Console.WriteLine($"Resetting GameObject: {s.Name}");
             s.Reset();
         }
 
         Singleton.Instance.Score = 0;
         Singleton.Instance.Timer = 0;
     }
-    private void RandomBubble()
-    {
-        _bubbles = new List<Bubble>();
-        int numberOfBubbles = Singleton.Instance.Random.Next(5, 20); // Generate a Random number of bubbles between 5 and 20
 
-        for (int i = 0; i < numberOfBubbles; i++)
-        {
-            int x = Singleton.Instance.Random.Next(0, 800); // Assuming the game width is 800
-            int y = Singleton.Instance.Random.Next(0, 600); // Assuming the game height is 600
-            Bubble bubble = new Bubble(Content.Load<Texture2D>("Bubble"))
-            {
-                Position = new Vector2(x, y),
-                Velocity = new Vector2(0, 0)
-            };
-            _bubbles.Add(bubble);
-        }
-    }
+    // private void ResetBubble()   # Old Version Keep It for Reference
+    // {
+    //     Texture2D BubblePuzzleTexture = Content.Load<Texture2D>("SpriteSheet");
+    //     Singleton.Instance.BubbleLeft = 48;
+
+    //     //  Each Color of Bubble in the SpriteSheet
+    //     Rectangle[] bubbleColors = new Rectangle[]
+    //     {
+    //     new Rectangle(21, 21, 70, 70),   // Yellow
+    //     new Rectangle(22, 132, 70, 70),  // Blue
+    //     new Rectangle(20, 240, 70, 70),  // Red
+    //     new Rectangle(20, 350, 70, 70),  // Brown
+    //     new Rectangle(20, 460, 70, 70)   // Black
+    //     };
+
+    //     int totalRows = 5; // จำนวนแถวทั้งหมด
+    //     for (int row = 0; row < totalRows; row++)  // ✅ วนลูปเพิ่มแถว
+    //     {
+    //         int columns = (row % 2 == 0) ? 10 : 9; // ✅ สลับจำนวนคอลัมน์ระหว่าง 10 และ 9
+    //         for (int col = 0; col < columns; col++)
+    //         {
+    //             var clone = new BubbleGrid(BubblePuzzleTexture)
+    //             {
+    //                 Name = "BubbleGrid",
+    //                 Score = 30,
+    //                 Velocity = new Vector2(0, 0),
+    //                 Viewport = bubbleColors[Singleton.Instance.Random.Next(bubbleColors.Length)]
+    //             };
+
+    //             // Random Color of Bubble
+    //             // clone.Viewport = bubbleColors[Singleton.Instance.Random.Next(bubbleColors.Length)];
+
+    //             // Set Position
+    //             float posX = 560 + (70 * col) + (35 * (row % 2)); // ขยับแถวที่เป็นเลขคี่
+    //             float posY = 100 + (70 * row); // ✅ เพิ่มค่าความสูงแต่ละแถว
+
+    //             clone.Position = new Vector2(posX, posY); // ✅ แก้ให้วาง Bubble ในแนวตั้งตามแถวที่ต้องการ
+
+    //             _gameObjects.Add(clone);
+    //             Console.WriteLine($"Added Bubble at X:{posX}, Y:{posY}, Row:{row}, Col:{col}");
+    //         }
+    //     }
+    // }
+
     private void ResetBubble()
     {
         Texture2D BubblePuzzleTexture = Content.Load<Texture2D>("SpriteSheet");
+        Singleton.Instance.BubbleLeft = 48;
 
-        BubbleGrid bg = new BubbleGrid(BubblePuzzleTexture)
+        // Each Color of Bubble in the SpriteSheet
+        Rectangle[] bubbleColors = new Rectangle[]
         {
-            Name = "Bubble",
-            Score = 30,
-            Viewport = new Rectangle(22, 132, 70, 70),
-            Velocity = new Vector2(0, 0)
+            new Rectangle(21, 21, 70, 70),   // Yellow
+            new Rectangle(22, 132, 70, 70),  // Blue
+            new Rectangle(20, 240, 70, 70),  // Red
+            new Rectangle(20, 350, 70, 70),  // Brown
+            new Rectangle(20, 460, 70, 70)   // Black
         };
 
-        // Initialize the Bubble Grid
-        for (int row = 0; row < 5; row++)
+        string[] bubbleColorNames = new string[]
         {
-            int columns = (row % 2 == 0) ? 10 : 9; // Switch Columns 10 - 9
+            "Yellow",
+            "Blue",
+            "Red",
+            "Brown",
+            "Black"
+        };
+
+        for (int row = 0; row < totalRows; row++)
+        {
+            int columns = (row % 2 == 0) ? 10 : 9; // Alternate between 10 and 9 columns
             for (int col = 0; col < columns; col++)
             {
-                var clone = bg.Clone() as BubbleGrid;
-                clone.Position = new Vector2(560 + (70 * col) + (35 * (row % 2)), 60 * row); // Between Bubble
+                int colorIndex = Singleton.Instance.Random.Next(bubbleColors.Length);
+                var clone = new BubbleGrid(BubblePuzzleTexture)
+                {
+                    Name = "BubbleGrid" + bubbleColorNames[colorIndex],
+                    Score = 30,
+                    Velocity = new Vector2(0, 0),
+                    Viewport = bubbleColors[colorIndex]
+                };
+
+                // Set Position
+                float posX = 560 + (70 * col) + (35 * (row % 2)); // Adjust odd rows
+                float posY = 100 + (70 * row); // Increase height for each row
+
+                clone.Position = new Vector2(posX, posY); // Place Bubble in the desired vertical row
+
                 _gameObjects.Add(clone);
+                Console.WriteLine($"Added Bubble at X:{posX}, Y:{posY}, Row:{row}, Col:{col}, Name:{clone.Name}");
             }
         }
     }
 
-    // public void ResetEnemies()
-    // {
-    //     Texture2D spaceInvaderTexture = this.Content.Load<Texture2D>("SpaceInvaderSheet");
+    private void MoveBubblesDown()
+    {
+        foreach (var gameObject in _gameObjects)
+        {
+            if (gameObject is BubbleGrid bubble)
+            {
+                bubble.Position = new Vector2(bubble.Position.X, bubble.Position.Y + Singleton.SizeBubbleHeight);
+            }
+        }
+    }
 
-    //     Singleton.Instance.InvaderLeft = 55;
+    private void AddNewRow()
+    {
+        Texture2D BubblePuzzleTexture = Content.Load<Texture2D>("SpriteSheet");
+        Rectangle[] bubbleColors = new Rectangle[]
+        {
+        new Rectangle(21, 21, 70, 70),   // Yellow
+        new Rectangle(22, 132, 70, 70),  // Blue
+        new Rectangle(20, 240, 70, 70),  // Red
+        new Rectangle(20, 350, 70, 70),  // Brown
+        new Rectangle(20, 460, 70, 70)   // Black
+        };
 
-    //     Invader newInvader30 = new Invader(spaceInvaderTexture)
-    //     {
-    //         Name = "Enemy",
-    //         Viewport = new Rectangle(78, 0, 30, 30),
-    //         Score = 30,
-    //         Bullet = new Bullet(spaceInvaderTexture)
-    //         {
-    //             Name = "BulletEnemy",
-    //             Viewport = new Rectangle(231, 36, 9, 21),
-    //             Velocity = new Vector2(0, 600f)
-    //         }
-    //     };
-    //     Invader newInvader20 = new Invader(spaceInvaderTexture)
-    //     {
-    //         Name = "Enemy",
-    //         Viewport = new Rectangle(0, 0, 39, 30),
-    //         Score = 20,
-    //         Bullet = new Bullet(spaceInvaderTexture)
-    //         {
-    //             Name = "BulletEnemy",
-    //             Viewport = new Rectangle(231, 36, 9, 21),
-    //             Velocity = new Vector2(0, 600f)
-    //         }
-    //     };
-    //     Invader newInvader10 = new Invader(spaceInvaderTexture)
-    //     {
-    //         Name = "Enemy",
-    //         Viewport = new Rectangle(138, 0, 42, 30),
-    //         Score = 10,
-    //         Bullet = new Bullet(spaceInvaderTexture)
-    //         {
-    //             Name = "BulletEnemy",
-    //             Viewport = new Rectangle(231, 36, 9, 21),
-    //             Velocity = new Vector2(0, 600f)
-    //         }
-    //     };
+        Console.WriteLine($"Adding New Row: {totalRows}");
+        int columns = (totalRows % 2 == 0) ? 10 : 9;
+        ++totalRows;
+        for (int col = 0; col < columns; col++)
+        {
+            var bubble = new BubbleGrid(BubblePuzzleTexture)
+            {
+                Name = "BubbleGrid",
+                Score = 30,
+                Velocity = new Vector2(0, 0),
+                Viewport = bubbleColors[Singleton.Instance.Random.Next(bubbleColors.Length)],
+                Position = new Vector2(columns == 9 ? 595 + (70 * col): 560 + (70 * col), 100) // Position at the top (new row)
+            };
+            _gameObjects.Add(bubble);
+        }
+    }
 
-
-    //     for (int i = 0; i < 11; i++)
-    //     {
-    //         var clone = newInvader30.Clone() as Invader;
-    //         clone.Position = new Vector2(Singleton.INVADERHORDEWIDTH / 11 * i +
-    //          (Singleton.INVADERHORDEWIDTH / 11 - newInvader30.Rectangle.Width) / 2, 130);
-    //         _gameObjects.Add(clone);
-    //     }
-    //     for (int i = 0; i < 11; i++)
-    //     {
-    //         var clone = newInvader20.Clone() as Invader;
-    //         clone.Position = new Vector2(Singleton.INVADERHORDEWIDTH / 11 * i +
-    //          (Singleton.INVADERHORDEWIDTH / 11 - newInvader20.Rectangle.Width) / 2, 160);
-    //         _gameObjects.Add(clone);
-    //     }
-    //     for (int i = 0; i < 11; i++)
-    //     {
-    //         var clone = newInvader20.Clone() as Invader;
-    //         clone.Position = new Vector2(Singleton.INVADERHORDEWIDTH / 11 * i +
-    //          (Singleton.INVADERHORDEWIDTH / 11 - newInvader20.Rectangle.Width) / 2, 190);
-    //         _gameObjects.Add(clone);
-    //     }
-    //     for (int i = 0; i < 11; i++)
-    //     {
-    //         var clone = newInvader10.Clone() as Invader;
-    //         clone.Position = new Vector2(Singleton.INVADERHORDEWIDTH / 11 * i +
-    //          (Singleton.INVADERHORDEWIDTH / 11 - newInvader10.Rectangle.Width) / 2, 220);
-    //         _gameObjects.Add(clone);
-    //     }
-    //     for (int i = 0; i < 11; i++)
-    //     {
-    //         var clone = newInvader10.Clone() as Invader;
-    //         clone.Position = new Vector2(Singleton.INVADERHORDEWIDTH / 11 * i +
-    //          (Singleton.INVADERHORDEWIDTH / 11 - newInvader10.Rectangle.Width) / 2, 250);
-    //         _gameObjects.Add(clone);
-    //     }
-    // }
 
     protected void DrawRectangleWithOutline(SpriteBatch spriteBatch, Texture2D pixel, Rectangle rect, Color outlineColor, int outlineThickness)
     {
