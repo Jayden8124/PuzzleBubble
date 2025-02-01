@@ -98,3 +98,9 @@ D:\Kmitl Work\Y3T2\Computer Game\Mid Term Proj\08\PuzzleBubble\PuzzleBubble\bin\
 D:\Kmitl Work\Y3T2\Computer Game\Mid Term Proj\08\PuzzleBubble\PuzzleBubble\obj\Debug\net8.0\PuzzleBu.9A3BFDDA.Up2Date
 D:\Kmitl Work\Y3T2\Computer Game\Mid Term Proj\08\PuzzleBubble\PuzzleBubble\obj\Debug\net8.0\PuzzleBubble.genruntimeconfig.cache
 D:\Kmitl Work\Y3T2\Computer Game\Mid Term Proj\08\PuzzleBubble\PuzzleBubble\obj\Debug\net8.0\ref\PuzzleBubble.dll
+D:\Kmitl Work\Y3T2\Computer Game\Mid Term Proj\08\PuzzleBubble\PuzzleBubble\bin\Debug\net8.0\Content\Plants Vs Zombies 2  Pirate Seas Theme.ogg
+D:\Kmitl Work\Y3T2\Computer Game\Mid Term Proj\08\PuzzleBubble\PuzzleBubble\bin\Debug\net8.0\Content\Plants Vs Zombies 2  Pirate Seas Theme.xnb
+D:\Kmitl Work\Y3T2\Computer Game\Mid Term Proj\08\PuzzleBubble\PuzzleBubble\bin\Debug\net8.0\Content\BGM.ogg
+D:\Kmitl Work\Y3T2\Computer Game\Mid Term Proj\08\PuzzleBubble\PuzzleBubble\bin\Debug\net8.0\Content\BGM.xnb
+D:\Kmitl Work\Y3T2\Computer Game\Mid Term Proj\08\PuzzleBubble\PuzzleBubble\bin\Debug\net8.0\Content\FireShoot.ogg
+D:\Kmitl Work\Y3T2\Computer Game\Mid Term Proj\08\PuzzleBubble\PuzzleBubble\bin\Debug\net8.0\Content\FireShoot.xnb

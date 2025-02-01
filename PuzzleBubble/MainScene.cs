@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using Microsoft.Xna.Framework.Audio; 
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 
@@ -20,6 +22,11 @@ public class MainScene : Game
     List<GameObject> _gameObjects;
     private int _numObjects;
     Texture2D lineTexture;
+    // โหลดเสียงยิงปืน (SoundEffect)
+
+// โหลดเพลงพื้นหลัง (Song)
+    private Song backgroundMusic;
+    public SoundEffect fireSound;
 
     public MainScene()
     {
@@ -44,12 +51,23 @@ public class MainScene : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         _font = Content.Load<SpriteFont>("GameFont");
         _background = Content.Load<Texture2D>("BG_Sprite");
+        
 
         // Rectangle for drawing a background
         _rect = new Texture2D(GraphicsDevice, 1, 1);
         _rect.SetData(new Color[] { Color.White });
         lineTexture = new Texture2D(GraphicsDevice, 1, 1);
         lineTexture.SetData(new Color[] { Color.Red });
+
+        _spriteBatch = new SpriteBatch(GraphicsDevice);
+        _font = Content.Load<SpriteFont>("GameFont");
+        _background = Content.Load<Texture2D>("BG_Sprite");
+
+        backgroundMusic = Content.Load<Song>("BGM"); 
+        fireSound = Content.Load<SoundEffect>("FireShoot"); 
+        MediaPlayer.Play(backgroundMusic);
+        MediaPlayer.IsRepeating = true;
+
 
         // Call Reset to initialize the game
         Reset();
@@ -265,7 +283,10 @@ public class MainScene : Game
                 Name = "BubbleBulletRed",
                 Viewport = new Rectangle(20, 240, 70, 70),
                 Velocity = new Vector2(0, 60f),
-            }
+            },
+    
+            fireSound = fireSound
+
         });
 
         ResetBubble();

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
+using System.Runtime.ExceptionServices;
 
 namespace PuzzleBubble
 {
@@ -13,11 +16,13 @@ namespace PuzzleBubble
         public Keys Left, Right, Fire;
         private float fireDelay = 0.5f;
         private float timeSinceLastShot = 0f;
+        public SoundEffect fireSound;
 
         public Gun(Texture2D texture) : base(texture)
         {
             previewBullet = new BubbleBullet(texture);
             previewBullet.IsActive = false;
+            
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -33,11 +38,14 @@ namespace PuzzleBubble
             base.Draw(spriteBatch);
         }
 
+
         public override void Reset()
         {
             timeSinceLastShot = 0f;
             base.Reset();
         }
+
+    
 
         public override void Update(GameTime gameTime, List<GameObject> gameObjects)
         {
@@ -119,6 +127,8 @@ namespace PuzzleBubble
         {
             // Clone the preview bullet as a new bubble
             var newBubble = previewBullet.Clone() as BubbleBullet;
+            
+            fireSound.Play();
 
             // Set the position and velocity of the fired bubble
             newBubble.Position = previewBullet.Position;

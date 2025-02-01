@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SourceFile>D:/Kmitl Work/Y3T2/Computer Game/Mid Term Proj/08/PuzzleBubble/PuzzleBubble/Content/Plants Vs Zombies 2  Pirate Seas Theme.mp3</SourceFile>
+  <SourceTime>2025-02-01T20:50:30.8228065+07:00</SourceTime>
+  <DestFile>D:/Kmitl Work/Y3T2/Computer Game/Mid Term Proj/08/PuzzleBubble/PuzzleBubble/Content/bin/DesktopGL/Content/Plants Vs Zombies 2  Pirate Seas Theme.xnb</DestFile>
+  <DestTime>2025-02-01T20:56:13.9176245+07:00</DestTime>
+  <Importer>Mp3Importer</Importer>
+  <ImporterTime>2024-08-17T00:05:56+07:00</ImporterTime>
+  <Processor>SongProcessor</Processor>
+  <ProcessorTime>2024-08-17T00:05:56+07:00</ProcessorTime>
+  <Parameters>
+    <Key>Quality</Key>
+    <Value>Best</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput>
+    <string>D:/Kmitl Work/Y3T2/Computer Game/Mid Term Proj/08/PuzzleBubble/PuzzleBubble/Content/bin/DesktopGL/Content/Plants Vs Zombies 2  Pirate Seas Theme.ogg</string>
+  </BuildOutput>
+</PipelineBuildEvent>
