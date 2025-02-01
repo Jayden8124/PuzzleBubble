@@ -122,37 +122,39 @@ public class MainScene : Game
 
         // Base Background
         _spriteBatch.Draw(_background, new Vector2(0, 0), new Rectangle(9, 2615, 1921, 1081), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f); // Background
+        _spriteBatch.Draw(_background, new Vector2(1428, 550), new Rectangle(14, 506, 439, 449), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f); // Tree Coconut
         _spriteBatch.Draw(_background, new Vector2(1400, 511), new Rectangle(11, 322, 425, 100), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f); // Scoreboard
         _spriteBatch.Draw(_background, new Vector2(1400, 631), new Rectangle(9, 196, 425, 100), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f); // Time
-        // _spriteBatch.Draw(_background, new Vector2(83, 92), new Rectangle(9, 196, 425, 100), Color.White, 0f, Vector2.Zero, new Vector2(0.8f, 0.39f), SpriteEffects.None, 0f); // Name Bar
         _spriteBatch.Draw(_background, new Vector2(40, 550), new Rectangle(26, 977, 426, 520), Color.White, 0f, Vector2.Zero, new Vector2(0.9f, 0.9f), SpriteEffects.None, 0f); // Island & Tree
         _spriteBatch.Draw(_background, new Vector2(1708, 999), new Rectangle(159, 20, 50, 50), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f); // Yellow Button
         _spriteBatch.Draw(_background, new Vector2(1770, 999), new Rectangle(89, 20, 50, 50), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f); // Red Button
         _spriteBatch.Draw(_background, new Vector2(1832, 999), new Rectangle(18, 20, 50, 50), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f); // Green Button
-        _spriteBatch.Draw(_rect, new Vector2(515, 65), null, Color.LightGray /* * 0.5f for transparent*/, 0f, Vector2.Zero, new Vector2(Singleton.PlayWidth, Singleton.PlayHeight), SpriteEffects.None, 0f); // Play Area
-        _spriteBatch.Draw(_rect, new Vector2(515, 980), null, Color.BurlyWood, 0f, Vector2.Zero, new Vector2(Singleton.PlayWidth, 100), SpriteEffects.None, 0f); // Under Play Area
-        DrawRectangleWithOutline(_spriteBatch, _rect, new Rectangle(515, 65, Singleton.PlayWidth, Singleton.PlayHeight), Color.Black, 5); // Play Area Outline
+        _spriteBatch.Draw(_rect, new Vector2(519, 65), null, Color.LightGray /* * 0.5f for transparent*/, 0f, Vector2.Zero, new Vector2(Singleton.PlayWidth, Singleton.PlayHeight), SpriteEffects.None, 0f); // Play Area
+        _spriteBatch.Draw(_rect, new Vector2(519, 980), null, Color.BurlyWood, 0f, Vector2.Zero, new Vector2(Singleton.PlayWidth, 100), SpriteEffects.None, 0f); // Under Play Area
+        DrawRectangleWithOutline(_spriteBatch, _rect, new Rectangle(519, 60, Singleton.PlayWidth, Singleton.PlayHeight), Color.DimGray, 40); // Play Area Outline // Play Area Outline
+        // _spriteBatch.Draw(pixel, new Rectangle(rect.X, rect.Y, rect.Width, outlineThickness), outlineColor); // Up
 
 
         _numObjects = _gameObjects.Count;
 
         for (int i = 0; i < _numObjects; i++)
         {
-            if (_gameObjects[i] is BubbleGrid)
-            {
-                Console.WriteLine($"Drawing BubbleGrid: {_gameObjects[i].Name}"); // Debug
-            }
+            // if (_gameObjects[i] is BubbleGrid)
+            // {
+            //     Console.WriteLine($"Drawing BubbleGrid: {_gameObjects[i].Name}"); // Debug
+            // }
             _gameObjects[i].Draw(_spriteBatch);
         }
 
         { // Add new row of bubbles
-            Singleton.Instance.Timer += gameTime.ElapsedGameTime.Ticks;
+            Singleton.Instance.TimeDown += gameTime.ElapsedGameTime.Ticks;
 
-            if (Singleton.Instance.Timer >= TimeSpan.TicksPerSecond * 10)
+            if (Singleton.Instance.TimeDown >= TimeSpan.TicksPerSecond * 10)
             {
-                Singleton.Instance.Timer = 0;
+                Singleton.Instance.TimeDown = 0;
                 MoveBubblesDown();
-                AddNewRow();
+                ResetBubble();
+                // AddNewRow();
             }
         }
 
@@ -255,7 +257,7 @@ public class MainScene : Game
         Singleton.Instance.Timer = 0;
     }
 
-    // private void ResetBubble()   # Old Version Keep It for Reference
+    // private void ResetBubble()   # Old Version Keep for Reference
     // {
     //     Texture2D BubblePuzzleTexture = Content.Load<Texture2D>("SpriteSheet");
     //     Singleton.Instance.BubbleLeft = 48;
@@ -323,9 +325,36 @@ public class MainScene : Game
             "Black"
         };
 
-        for (int row = 0; row < totalRows; row++)
+        if (totalRows - 1 < 5)
         {
-            int columns = (row % 2 == 0) ? 10 : 9; // Alternate between 10 and 9 columns
+            for (int row = 0; row < totalRows; row++)
+            {
+                int columns = (row % 2 == 0) ? 10 : 9; // Alternate between 10 and 9 columns
+                for (int col = 0; col < columns; col++)
+                {
+                    int colorIndex = Singleton.Instance.Random.Next(bubbleColors.Length);
+                    var clone = new BubbleGrid(BubblePuzzleTexture)
+                    {
+                        Name = "BubbleGrid" + bubbleColorNames[colorIndex],
+                        Score = 30,
+                        Velocity = new Vector2(0, 0),
+                        Viewport = bubbleColors[colorIndex]
+                    };
+
+                    // Set Position
+                    float posX = 560 + (70 * col) + (35 * (row % 2)); // Adjust odd rows
+                    float posY = totalRows >= 5 ? 100 + (70 * row) : 100; // Increase height for each row
+
+                    clone.Position = new Vector2(posX, posY); // Place Bubble in the desired vertical row
+
+                    _gameObjects.Add(clone);
+                    Console.WriteLine($"Added Bubble at X:{posX}, Y:{posY}, Row:{row}, Col:{col}, Name:{clone.Name}");
+                }
+            }
+        }
+        else if (totalRows >= 5)
+        {
+            int columns = (totalRows % 2 == 0) ? 9 : 10; // Alternate between 10 and 9 columns
             for (int col = 0; col < columns; col++)
             {
                 int colorIndex = Singleton.Instance.Random.Next(bubbleColors.Length);
@@ -338,15 +367,16 @@ public class MainScene : Game
                 };
 
                 // Set Position
-                float posX = 560 + (70 * col) + (35 * (row % 2)); // Adjust odd rows
-                float posY = 100 + (70 * row); // Increase height for each row
+                float posX = columns == 9 ? 595 + (70 * col) : 560 + (70 * col); // Adjust odd rows
+                float posY = 100; // Increase height for each row
 
                 clone.Position = new Vector2(posX, posY); // Place Bubble in the desired vertical row
+                Console.WriteLine($"Added Bubble at X:{posX}, Y:{posY}, Row:{totalRows}, Col:{col}, Name:{clone.Name}");
 
                 _gameObjects.Add(clone);
-                Console.WriteLine($"Added Bubble at X:{posX}, Y:{posY}, Row:{row}, Col:{col}, Name:{clone.Name}");
             }
         }
+        ++totalRows;
     }
 
     private void MoveBubblesDown()
@@ -360,42 +390,57 @@ public class MainScene : Game
         }
     }
 
-    private void AddNewRow()
-    {
-        Texture2D BubblePuzzleTexture = Content.Load<Texture2D>("SpriteSheet");
-        Rectangle[] bubbleColors = new Rectangle[]
-        {
-        new Rectangle(21, 21, 70, 70),   // Yellow
-        new Rectangle(22, 132, 70, 70),  // Blue
-        new Rectangle(20, 240, 70, 70),  // Red
-        new Rectangle(20, 350, 70, 70),  // Brown
-        new Rectangle(20, 460, 70, 70)   // Black
-        };
+    // private void AddNewRow()
+    // {
+    //     Texture2D BubblePuzzleTexture = Content.Load<Texture2D>("SpriteSheet");
+    //     Rectangle[] bubbleColors = new Rectangle[]
+    //     {
+    //     new Rectangle(21, 21, 70, 70),   // Yellow
+    //     new Rectangle(22, 132, 70, 70),  // Blue
+    //     new Rectangle(20, 240, 70, 70),  // Red
+    //     new Rectangle(20, 350, 70, 70),  // Brown
+    //     new Rectangle(20, 460, 70, 70)   // Black
+    //     };
 
-        Console.WriteLine($"Adding New Row: {totalRows}");
-        int columns = (totalRows % 2 == 0) ? 10 : 9;
-        ++totalRows;
-        for (int col = 0; col < columns; col++)
-        {
-            var bubble = new BubbleGrid(BubblePuzzleTexture)
-            {
-                Name = "BubbleGrid",
-                Score = 30,
-                Velocity = new Vector2(0, 0),
-                Viewport = bubbleColors[Singleton.Instance.Random.Next(bubbleColors.Length)],
-                Position = new Vector2(columns == 9 ? 595 + (70 * col): 560 + (70 * col), 100) // Position at the top (new row)
-            };
-            _gameObjects.Add(bubble);
-        }
-    }
+    //     string[] bubbleColorNames = new string[]
+    //     {
+    //         "Yellow",
+    //         "Blue",
+    //         "Red",
+    //         "Brown",
+    //         "Black"
+    //     };
 
+    //     Console.WriteLine($"Adding New Row: {totalRows + 1}");
+    //     int columns = (totalRows % 2 == 0) ? 10 : 9; ++totalRows;
+    //     for (int col = 0; col < columns; col++)
+    //     {
+    //         int colorIndex = Singleton.Instance.Random.Next(bubbleColors.Length);
+    //         var clone = new BubbleGrid(BubblePuzzleTexture)
+    //         {
+    //             Name = "BubbleGrid" + bubbleColorNames[colorIndex],
+    //             Score = 30,
+    //             Velocity = new Vector2(0, 0),
+    //             Viewport = bubbleColors[colorIndex]
+    //         };
+
+    //         // Set Position
+    //         float posX = columns == 9 ? 595 + (70 * col) : 560 + (70 * col); // Adjust odd rows
+    //         float posY = 100; // Increase height for each row
+
+    //         clone.Position = new Vector2(posX, posY); // Place Bubble in the desired vertical row
+
+    //         _gameObjects.Add(clone);
+    //         Console.WriteLine($"Added Bubble at X:{posX}, Y:{posY}, Row:{totalRows}, Col:{col}, Name:{clone.Name}");
+    //     }
+    // }
 
     protected void DrawRectangleWithOutline(SpriteBatch spriteBatch, Texture2D pixel, Rectangle rect, Color outlineColor, int outlineThickness)
     {
         // Draw Outline
         spriteBatch.Draw(pixel, new Rectangle(rect.X, rect.Y, rect.Width, outlineThickness), outlineColor); // Up
-        spriteBatch.Draw(pixel, new Rectangle(rect.X, rect.Y, outlineThickness, rect.Height), outlineColor); // Left
-        spriteBatch.Draw(pixel, new Rectangle(rect.X + rect.Width - outlineThickness, rect.Y, outlineThickness, rect.Height), outlineColor); // Right
-        spriteBatch.Draw(pixel, new Rectangle(rect.X, rect.Y + rect.Height - outlineThickness, rect.Width, outlineThickness), outlineColor); // Down
+        spriteBatch.Draw(pixel, new Rectangle(rect.X, rect.Y + 5, outlineThickness, rect.Height), outlineColor); // Left
+        spriteBatch.Draw(pixel, new Rectangle(rect.X + rect.Width - outlineThickness, rect.Y + 5, outlineThickness, rect.Height), outlineColor); // Right
+        // spriteBatch.Draw(pixel, new Rectangle(rect.X, rect.Y + rect.Height - outlineThickness, rect.Width, outlineThickness), outlineColor); // Down
     }
 }

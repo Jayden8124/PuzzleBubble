@@ -8,11 +8,11 @@ namespace PuzzleBubble
 {
     class Gun : GameObject
     {
-        public BubbleBullet bubbleBulletYellow, bubbleBulletBlue, bubbleBulletBrown, bubbleBulletBlack, bubbleBulletRed, currentBubbleBullet, nextBubbleBullet;
+        public BubbleBullet bubbleBulletYellow, bubbleBulletBlue, bubbleBulletBrown, bubbleBulletBlack, bubbleBulletRed;
+        public BubbleBullet currentBubbleBullet, previewBullet;
         public Keys Left, Right, Fire;
         private float fireDelay = 0.5f;
         private float timeSinceLastShot = 0f;
-        private BubbleBullet previewBullet;
 
         public Gun(Texture2D texture) : base(texture)
         {
@@ -22,110 +22,134 @@ namespace PuzzleBubble
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (previewBullet != null)
-        {
-            previewBullet.Draw(spriteBatch);
-        }
+            // Draw preview bullet if it's active
+            if (previewBullet.IsActive)
+            {
+                previewBullet.Draw(spriteBatch);  // Preview Bullet
+            }
+
+            // Draw the gun
             spriteBatch.Draw(_texture, Position, Viewport, Color.White, Rotation, new Vector2(Rectangle.Width / 2, Rectangle.Height), 1.0f, SpriteEffects.None, 0f);
             base.Draw(spriteBatch);
         }
 
-        public override void Reset()        
+        public override void Reset()
         {
             timeSinceLastShot = 0f;
-
             base.Reset();
         }
+
         public override void Update(GameTime gameTime, List<GameObject> gameObjects)
         {
-            float rotationSpeed = 3f; // Rotation speed in radians per second
-            float minRotation = MathHelper.ToRadians(-45); // Allow rotation to -45 degrees
-            float maxRotation = MathHelper.ToRadians(45);  // Allow rotation to 45 degrees
+            float rotationSpeed = 3f; // Speed of gun rotation
+            float minRotation = MathHelper.ToRadians(-45); // Min rotation
+            float maxRotation = MathHelper.ToRadians(45);  // Max rotation
 
-            KeyboardState currentKeyState = Keyboard.GetState(); // Get All Keyboard State
+            KeyboardState currentKeyState = Keyboard.GetState(); // Get the current keyboard state
 
-            // Rotate left when Left arrow is pressed
+            // Rotate gun to the left or right
             if (currentKeyState.IsKeyDown(Left))
             {
-                Rotation -= rotationSpeed * gameTime.ElapsedGameTime.Ticks / TimeSpan.TicksPerSecond;
+                Rotation -= rotationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
-            // Rotate right when Right arrow is pressed
             if (currentKeyState.IsKeyDown(Right))
             {
-                Rotation += rotationSpeed * gameTime.ElapsedGameTime.Ticks / TimeSpan.TicksPerSecond;
+                Rotation += rotationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
 
-            // Clamp rotation within range
+            // Clamp the rotation to a specific range
             Rotation = MathHelper.Clamp(Rotation, minRotation, maxRotation);
 
-            // Fire bubble when Space key is pressed
-            if (Singleton.Instance.CurrentKey.IsKeyDown(Fire) &&
-                Singleton.Instance.PreviousKey != Singleton.Instance.CurrentKey &&
-                timeSinceLastShot >= fireDelay)
+            // Fire bubble if the Spacebar is pressed and the delay is met
+            if (Singleton.Instance.CurrentKey.IsKeyDown(Fire) && Singleton.Instance.PreviousKey != Singleton.Instance.CurrentKey && timeSinceLastShot >= fireDelay)
             {
-                ChangeBubbleBullet();
                 FireBullet(gameObjects);
                 timeSinceLastShot = 0f;
-                //_audioManager.Play("BubbleShot");
-                currentBubbleBullet = nextBubbleBullet;
             }
 
+            // Update time since the last shot
             timeSinceLastShot += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            // Update previous key state
-            Singleton.Instance.PreviousKey = currentKeyState;
-
+            // Update preview bubble position
             UpdatePreviewBulletPosition();
-    
+
             base.Update(gameTime, gameObjects);
 
+            // Remove inactive game objects
             gameObjects.RemoveAll(obj => !obj.IsActive);
-
         }
-        public void UpdatePreviewBulletPosition()
-    {
-        
-        Vector2 gunTipPosition = new Vector2(
-            Position.X + (float)Math.Cos(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight + 60),
-            Position.Y + (float)Math.Sin(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight + 60)
-        );
 
-        previewBullet.Position = gunTipPosition;
-        previewBullet.Velocity = new Vector2((float)Math.Cos(Rotation), (float)Math.Sin(Rotation)) * 50;
-        previewBullet.Angle = -Rotation;
-    }
+        // Update the position of the preview bullet based on the gun's rotation
+        // public void UpdatePreviewBulletPosition()
+        // {
+        //     Vector2 gunTipPosition = new Vector2(
+        //         Position.X * (float)Math.Cos(Rotation - MathHelper.PiOver2)/20 + 875,
+        //         Position.Y + (float)Math.Sin(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight - 60)
+        //     );
+        //     Console.WriteLine($"GunTipPosition: {Position.X}, {Position.Y}");
+        //     Console.WriteLine($"GunTipPosition: Math.Cos{MathHelper.PiOver2})");
+        //     Console.WriteLine($"{Rotation}");
+
+        //     // Set preview bullet position and velocity
+        //     previewBullet.Position = gunTipPosition;
+        //     previewBullet.Velocity = new Vector2((float)Math.Cos(Rotation), (float)Math.Sin(Rotation)) * 50;
+        //     previewBullet.Angle = -Rotation;
+        //     previewBullet.IsActive = true; // Make sure preview bullet is visible
+        // }
+
+        public void UpdatePreviewBulletPosition()
+        {
+            // หาตำแหน่งศูนย์กลางของปืน
+            Vector2 gunCenter = new Vector2(
+                Position.X * (float)Math.Cos(Rotation - MathHelper.PiOver2)/20 + 875, // หาตำแหน่ง X ของปืน 875
+                // Rotation >= 0 ? Position.Y + (float)Math.Sin(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight - 65) // ขยับขึ้นให้เป็นจุดกลางของปืน}
+                // : Position.Y + (float)Math.Sin(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight - 60)
+                Position.Y + (float)Math.Sin(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight - 65) // ขยับขึ้นให้เป็นจุดกลางของปืน
+            );
+
+            // ตั้งค่า preview bullet ให้อยู่ตรงกลางของปืน
+            previewBullet.Position = gunCenter;
+            previewBullet.Velocity = new Vector2((float)Math.Cos(Rotation), (float)Math.Sin(Rotation)) * 50;
+            previewBullet.Angle = -Rotation; // ไม่ให้หมุน
+            previewBullet.IsActive = true; // แสดง preview เสมอ
+        }
+
+        // Fire the current preview bullet
         public void FireBullet(List<GameObject> gameObjects)
         {
-            // Clone currentBubbleBullet to create a new instance
-            var newBubble = currentBubbleBullet.Clone() as BubbleBullet;
+            // Clone the preview bullet as a new bubble
+            var newBubble = previewBullet.Clone() as BubbleBullet;
 
-            Vector2 gunTipPosition = new Vector2(
-                Position.X + (float)Math.Cos(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight + 60),
-                Position.Y + (float)Math.Sin(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight + 60)
-        );
+            // Set the position and velocity of the fired bubble
+            newBubble.Position = previewBullet.Position;
+            newBubble.Velocity = previewBullet.Velocity;
+            newBubble.Angle = previewBullet.Angle;
 
-            // ตั้งค่าตำแหน่งของลูกกระสุน
-            newBubble.Position = gunTipPosition;
-            newBubble.Velocity = new Vector2((float)Math.Cos(Rotation), (float)Math.Sin(Rotation)) * 50;
-            newBubble.Angle = -Rotation;
-
+            // Reset the fired bubble
             newBubble.Reset();
+
+            // Add the new bubble to the game objects
             gameObjects.Add(newBubble);
+
+            // Deactivate the preview bullet after firing
             previewBullet.IsActive = false;
+
+            // Switch the preview bullet to the next bubble
+            ChangeBubbleBullet();
         }
 
+        // Randomly change the bubble type to the next bubble
         public void ChangeBubbleBullet()
         {
-            // Randomly select a bubble type
             BubbleBullet[] bubbleBullets = { bubbleBulletYellow, bubbleBulletBlue, bubbleBulletBrown, bubbleBulletBlack, bubbleBulletRed };
-            nextBubbleBullet = bubbleBullets[Singleton.Instance.Random.Next(bubbleBullets.Length)];
+            int randomIndex = Singleton.Instance.Random.Next(bubbleBullets.Length);
 
-            if (currentBubbleBullet == null)
-            {
-                currentBubbleBullet = bubbleBulletYellow;
-            }
-            previewBullet.IsActive = true;
+            // Set the current bubble to a new random bubble type
+            currentBubbleBullet = bubbleBullets[randomIndex];
+
+            // Set the preview bubble to match the current bubble
+            previewBullet = currentBubbleBullet;
+            previewBullet.IsActive = true; // Make sure it's active
         }
-
     }
 }

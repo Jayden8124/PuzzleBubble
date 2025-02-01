@@ -21,9 +21,8 @@ namespace PuzzleBubble
         public int BubbleLeft;
         public int Score;
         public long Timer;
+        public long TimeDown;
         
-        public int Life;
-
         // Background Size
         public const int PlayWidth = 780;
         public const int PlayHeight = 915;

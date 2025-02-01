@@ -64,9 +64,9 @@ namespace PuzzleBubble
         {
             return this.MemberwiseClone();
         }
-
+  
         #region Collision
-        protected bool IsTouching(GameObject g)
+        public bool IsTouching(GameObject g)
         {
             return IsTouchingLeft(g) ||
                 IsTouchingTop(g) ||

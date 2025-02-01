@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PuzzleBubble")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+11f925873b2c508b6fbe4610cd98726b0c4e4e24")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d7946502e6158ec719f13a72138a8b977d7f20d8")]
 [assembly: System.Reflection.AssemblyProductAttribute("PuzzleBubble")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PuzzleBubble")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
