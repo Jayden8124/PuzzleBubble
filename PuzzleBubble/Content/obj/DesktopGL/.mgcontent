@@ -8,10 +8,12 @@
     <File>d:/Kmitl Work/Y3T2/Computer Game/Mid Term Proj/08/PuzzleBubble/PuzzleBubble/Content/BGM.mp3</File>
     <File>d:/Kmitl Work/Y3T2/Computer Game/Mid Term Proj/08/PuzzleBubble/PuzzleBubble/Content/FireShoot.mp3</File>
     <File>d:/Kmitl Work/Y3T2/Computer Game/Mid Term Proj/08/PuzzleBubble/PuzzleBubble/Content/GameFont.spritefont</File>
+    <File>d:/Kmitl Work/Y3T2/Computer Game/Mid Term Proj/08/PuzzleBubble/PuzzleBubble/Content/GameOver.mp3</File>
     <File>d:/Kmitl Work/Y3T2/Computer Game/Mid Term Proj/08/PuzzleBubble/PuzzleBubble/Content/gun.png</File>
     <File>d:/Kmitl Work/Y3T2/Computer Game/Mid Term Proj/08/PuzzleBubble/PuzzleBubble/Content/Sprite2.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

@@ -44,6 +44,12 @@
 /processorParam:TextureFormat=Compressed
 /build:GameFont.spritefont
 
+#begin GameOver.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:GameOver.mp3
+
 #begin gun.png
 /importer:TextureImporter
 /processor:TextureProcessor

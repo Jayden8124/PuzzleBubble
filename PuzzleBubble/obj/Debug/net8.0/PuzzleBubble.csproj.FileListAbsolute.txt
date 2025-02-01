@@ -104,3 +104,5 @@ D:\Kmitl Work\Y3T2\Computer Game\Mid Term Proj\08\PuzzleBubble\PuzzleBubble\bin\
 D:\Kmitl Work\Y3T2\Computer Game\Mid Term Proj\08\PuzzleBubble\PuzzleBubble\bin\Debug\net8.0\Content\BGM.xnb
 D:\Kmitl Work\Y3T2\Computer Game\Mid Term Proj\08\PuzzleBubble\PuzzleBubble\bin\Debug\net8.0\Content\FireShoot.ogg
 D:\Kmitl Work\Y3T2\Computer Game\Mid Term Proj\08\PuzzleBubble\PuzzleBubble\bin\Debug\net8.0\Content\FireShoot.xnb
+D:\Kmitl Work\Y3T2\Computer Game\Mid Term Proj\08\PuzzleBubble\PuzzleBubble\bin\Debug\net8.0\Content\Gameover.ogg
+D:\Kmitl Work\Y3T2\Computer Game\Mid Term Proj\08\PuzzleBubble\PuzzleBubble\bin\Debug\net8.0\Content\Gameover.xnb

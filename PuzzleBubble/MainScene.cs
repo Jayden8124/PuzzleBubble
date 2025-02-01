@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Intrinsics.X86;
+using Microsoft.Xna.Framework.Input;
 
 namespace PuzzleBubble;
 
@@ -22,11 +24,11 @@ public class MainScene : Game
     List<GameObject> _gameObjects;
     private int _numObjects;
     Texture2D lineTexture;
-    // โหลดเสียงยิงปืน (SoundEffect)
-
-// โหลดเพลงพื้นหลัง (Song)
     private Song backgroundMusic;
+    private SoundEffect GameOver;
     public SoundEffect fireSound;
+    Keys increaseVolumeKey = Keys.Up;
+    Keys decreaseVolumeKey = Keys.Down;
 
     public MainScene()
     {
@@ -63,10 +65,11 @@ public class MainScene : Game
         _font = Content.Load<SpriteFont>("GameFont");
         _background = Content.Load<Texture2D>("BG_Sprite");
 
-        backgroundMusic = Content.Load<Song>("BGM"); 
+        backgroundMusic = Content.Load<Song>("BGM");
+        GameOver = Content.Load<SoundEffect>("GameOver"); 
         fireSound = Content.Load<SoundEffect>("FireShoot"); 
-        MediaPlayer.Play(backgroundMusic);
-        MediaPlayer.IsRepeating = true;
+        // MediaPlayer.Play(backgroundMusic);
+        // MediaPlayer.IsRepeating = true;
 
 
         // Call Reset to initialize the game
@@ -79,12 +82,36 @@ public class MainScene : Game
 
         //update
         _numObjects = _gameObjects.Count;
-        // Singleton.Instance.CurrentGameState = Singleton.GameState.GamePlaying;
+        KeyboardState currentKeyState = Keyboard.GetState();
+        if (currentKeyState.IsKeyDown(Keys.P))
+        {
+            MediaPlayer.Pause();
+        }
+        if (currentKeyState.IsKeyDown(Keys.R))
+        {
+            MediaPlayer.Resume();
+        }
 
+        if (currentKeyState.IsKeyDown(increaseVolumeKey))
+        {
+            // Increase the volume, ensuring it does not exceed 1.0
+            MediaPlayer.Volume = Math.Min(MediaPlayer.Volume + 0.01f, 1.0f);
+        }
+
+        // Check if the decrease volume key is pressed
+        if (currentKeyState.IsKeyDown(decreaseVolumeKey))
+        {
+            // Decrease the volume, ensuring it does not go below 0.0
+            MediaPlayer.Volume = Math.Max(MediaPlayer.Volume - 0.01f, 0.0f);
+        }   
         switch (Singleton.Instance.CurrentGameState)
         {
+            
             case Singleton.GameState.Start:
                 Singleton.Instance.CurrentGameState = Singleton.GameState.GamePlaying;
+                MediaPlayer.Play(backgroundMusic);
+                MediaPlayer.IsRepeating = true;
+                
                 break;
             case Singleton.GameState.GamePlaying:
                 Singleton.Instance.Timer += gameTime.ElapsedGameTime.Ticks;
@@ -121,18 +148,23 @@ public class MainScene : Game
                     if (g is BubbleGrid bubble && bubble.Position.Y >= 870)
                     {
                         // Game over logic if bubble crosses red line
+                        GameOver.Play();
                         Singleton.Instance.CurrentGameState = Singleton.GameState.GameOver;
+                        
                     }
                 }
                 break;
             case Singleton.GameState.GameOver:
+
                 if (!Singleton.Instance.CurrentKey.Equals(Singleton.Instance.PreviousKey) && Singleton.Instance.CurrentKey.GetPressedKeys().Length > 0)
                 {
                     //     // any key to restart
                     Reset();
                     Singleton.Instance.CurrentGameState = Singleton.GameState.Start;
+                    MediaPlayer.Stop();
                 }
                 break;
+                
 
         }
 
@@ -208,6 +240,20 @@ public class MainScene : Game
                 break;
 
             case Singleton.GameState.GameOver:
+                MediaPlayer.Stop();
+
+                if (GameOver != null)
+    {
+        // Set volume to maximum
+        MediaPlayer.Volume = 1.0f;
+        
+        // Play the GameOver sound
+        MediaPlayer.Play(backgroundMusic);
+        
+        // Set the music to repeat
+        MediaPlayer.IsRepeating = true;
+    }
+            
                 fontSize = _font.MeasureString("Game Over");
                 _spriteBatch.DrawString(_font, "Game Over", new Vector2((965 - fontSize.X)  - 2, (555 - fontSize.Y) - 2), Color.White);
                 _spriteBatch.DrawString(_font, "Game Over", new Vector2((965 - fontSize.X)  + 2, (555 - fontSize.Y)  - 2), Color.White);
