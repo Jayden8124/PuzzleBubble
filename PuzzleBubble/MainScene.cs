@@ -270,27 +270,27 @@ public class MainScene : Game
                 }
             }
         }
-        // else if (Singleton.Instance.totalRows >= 5)
-        // {
-        //     int columns = (Singleton.Instance.totalRows % 2 == 0) ? 9 : 10;
-        //     for (int col = 0; col < columns; col++)
-        //     {
-        //         int colorIndex = Singleton.Instance.Random.Next(bubbleColors.Length);
-        //         var clone = new BubbleGrid(BubblePuzzleTexture)
-        //         {
-        //             Name = "BubbleGrid" + bubbleColorNames[colorIndex],
-        //             Score = 30,
-        //             Velocity = new Vector2(0, 0),
-        //             Viewport = bubbleColors[colorIndex],
-        //             Row = Singleton.Instance.totalRows,
-        //             Col = col
-        //         };
-        //         float posX = columns == 9 ? 595 + (70 * col) : 560 + (70 * col);
-        //         float posY = 100;
-        //         clone.Position = new Vector2(posX, posY);
-        //         _gameObjects.Add(clone);
-        //     }
-        // }
+        else if (Singleton.Instance.totalRows >= 5)
+        {
+            int columns = (Singleton.Instance.totalRows % 2 == 0) ? 9 : 10;
+            for (int col = 0; col < columns; col++)
+            {
+                int colorIndex = Singleton.Instance.Random.Next(bubbleColors.Length);
+                var clone = new BubbleGrid(BubblePuzzleTexture)
+                {
+                    Name = "BubbleGrid" + bubbleColorNames[colorIndex],
+                    Score = 30,
+                    Velocity = new Vector2(0, 0),
+                    Viewport = bubbleColors[colorIndex],
+                    Row = Singleton.Instance.totalRows,
+                    Col = col
+                };
+                float posX = columns == 9 ? 595 + (70 * col) : 560 + (70 * col);
+                float posY = 100;
+                clone.Position = new Vector2(posX, posY);
+                _gameObjects.Add(clone);
+            }
+        }
         ++Singleton.Instance.totalRows;
     }
 

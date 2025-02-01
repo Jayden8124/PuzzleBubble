@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>D:/Kmitl Work/Y3T2/Computer Game/Mid Term Proj/08/PuzzleBubble/PuzzleBubble/Content/BGM.mp3</SourceFile>
-  <SourceTime>2025-02-01T20:50:30.8228065+07:00</SourceTime>
-  <DestFile>D:/Kmitl Work/Y3T2/Computer Game/Mid Term Proj/08/PuzzleBubble/PuzzleBubble/Content/bin/DesktopGL/Content/BGM.xnb</DestFile>
-  <DestTime>2025-02-01T20:58:30.0970345+07:00</DestTime>
+  <SourceFile>C:/Study-Comsci/Y3T2/COMGAME/Project_midterm/PuzzleBubble/PuzzleBubble/Content/BGM.mp3</SourceFile>
+  <SourceTime>2025-02-01T21:52:32.0071258+07:00</SourceTime>
+  <DestFile>C:/Study-Comsci/Y3T2/COMGAME/Project_midterm/PuzzleBubble/PuzzleBubble/Content/bin/DesktopGL/Content/BGM.xnb</DestFile>
+  <DestTime>2025-02-02T00:18:23.9662533+07:00</DestTime>
   <Importer>Mp3Importer</Importer>
   <ImporterTime>2024-08-17T00:05:56+07:00</ImporterTime>
   <Processor>SongProcessor</Processor>
@@ -15,6 +15,6 @@
   <Dependencies />
   <BuildAsset />
   <BuildOutput>
-    <string>D:/Kmitl Work/Y3T2/Computer Game/Mid Term Proj/08/PuzzleBubble/PuzzleBubble/Content/bin/DesktopGL/Content/BGM.ogg</string>
+    <string>C:/Study-Comsci/Y3T2/COMGAME/Project_midterm/PuzzleBubble/PuzzleBubble/Content/bin/DesktopGL/Content/BGM.ogg</string>
   </BuildOutput>
 </PipelineBuildEvent>
