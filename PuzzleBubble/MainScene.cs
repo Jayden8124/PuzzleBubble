@@ -19,7 +19,7 @@ public class MainScene : Game
 
     List<GameObject> _gameObjects;
     private int _numObjects;
-    private int totalRows = 5;
+    Texture2D lineTexture;
 
     public MainScene()
     {
@@ -43,12 +43,13 @@ public class MainScene : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         _font = Content.Load<SpriteFont>("GameFont");
-
         _background = Content.Load<Texture2D>("BG_Sprite");
 
         // Rectangle for drawing a background
         _rect = new Texture2D(GraphicsDevice, 1, 1);
         _rect.SetData(new Color[] { Color.White });
+        lineTexture = new Texture2D(GraphicsDevice, 1, 1);
+        lineTexture.SetData(new Color[] { Color.Red });
 
         // Call Reset to initialize the game
         Reset();
@@ -95,6 +96,15 @@ public class MainScene : Game
                             s.Reset();
                         }
                     }
+
+                }
+                foreach (GameObject g in _gameObjects)
+                {
+                    if (g is BubbleGrid bubble && bubble.Position.Y >= 870)
+                    {
+                        // Game over logic if bubble crosses red line
+                        Singleton.Instance.CurrentGameState = Singleton.GameState.GameOver;
+                    }
                 }
                 break;
             case Singleton.GameState.GameOver:
@@ -105,6 +115,7 @@ public class MainScene : Game
                     Singleton.Instance.CurrentGameState = Singleton.GameState.Start;
                 }
                 break;
+
         }
 
 
@@ -132,31 +143,9 @@ public class MainScene : Game
         _spriteBatch.Draw(_rect, new Vector2(519, 65), null, Color.LightGray /* * 0.5f for transparent*/, 0f, Vector2.Zero, new Vector2(Singleton.PlayWidth, Singleton.PlayHeight), SpriteEffects.None, 0f); // Play Area
         _spriteBatch.Draw(_rect, new Vector2(519, 980), null, Color.BurlyWood, 0f, Vector2.Zero, new Vector2(Singleton.PlayWidth, 100), SpriteEffects.None, 0f); // Under Play Area
         DrawRectangleWithOutline(_spriteBatch, _rect, new Rectangle(519, 60, Singleton.PlayWidth, Singleton.PlayHeight), Color.DimGray, 40); // Play Area Outline // Play Area Outline
+        DrawLine(new Vector2(559, 870), new Vector2(1259, 870));
         // _spriteBatch.Draw(pixel, new Rectangle(rect.X, rect.Y, rect.Width, outlineThickness), outlineColor); // Up
 
-
-        _numObjects = _gameObjects.Count;
-
-        for (int i = 0; i < _numObjects; i++)
-        {
-            // if (_gameObjects[i] is BubbleGrid)
-            // {
-            //     Console.WriteLine($"Drawing BubbleGrid: {_gameObjects[i].Name}"); // Debug
-            // }
-            _gameObjects[i].Draw(_spriteBatch);
-        }
-
-        { // Add new row of bubbles
-            Singleton.Instance.TimeDown += gameTime.ElapsedGameTime.Ticks;
-
-            if (Singleton.Instance.TimeDown >= TimeSpan.TicksPerSecond * 10)
-            {
-                Singleton.Instance.TimeDown = 0;
-                MoveBubblesDown();
-                ResetBubble();
-                // AddNewRow();
-            }
-        }
 
         // Get Mouse State X,Y
         MouseState mouseState = Mouse.GetState();
@@ -172,17 +161,42 @@ public class MainScene : Game
         _spriteBatch.DrawString(_font, "Score: " + Singleton.Instance.Score.ToString(), new Vector2(1460, 545), Color.White);
         _spriteBatch.DrawString(_font, "TIME: " + String.Format("{0}:{1:00}", Singleton.Instance.Timer / 600000000, Singleton.Instance.Timer / 10000000 % 60), new Vector2(1460, 665), Color.White);
 
+          _numObjects = _gameObjects.Count;
+
+                for (int i = 0; i < _numObjects; i++)
+                {
+                    // if (_gameObjects[i] is BubbleGrid)
+                    // {
+                    //     Console.WriteLine($"Drawing BubbleGrid: {_gameObjects[i].Name}"); // Debug
+                    // }
+                    _gameObjects[i].Draw(_spriteBatch);
+                }
 
         // Draw Gameover in the middle of the screen
-        if (Singleton.Instance.CurrentGameState == Singleton.GameState.GameOver)
+        switch (Singleton.Instance.CurrentGameState)
         {
-            fontSize = _font.MeasureString("Game Over");
-            _spriteBatch.DrawString(_font, "Game Over", new Vector2((Singleton.SCREENWIDTH - fontSize.X) / 2 - 2, (Singleton.SCREENHEIGHT - fontSize.Y) / 2 - 2), Color.White);
-            _spriteBatch.DrawString(_font, "Game Over", new Vector2((Singleton.SCREENWIDTH - fontSize.X) / 2 + 2, (Singleton.SCREENHEIGHT - fontSize.Y) / 2 - 2), Color.White);
-            _spriteBatch.DrawString(_font, "Game Over", new Vector2((Singleton.SCREENWIDTH - fontSize.X) / 2 + 2, (Singleton.SCREENHEIGHT - fontSize.Y) / 2 + 2), Color.White);
-            _spriteBatch.DrawString(_font, "Game Over", new Vector2((Singleton.SCREENWIDTH - fontSize.X) / 2 - 2, (Singleton.SCREENHEIGHT - fontSize.Y) / 2 + 2), Color.White);
-            _spriteBatch.DrawString(_font, "Game Over", new Vector2((Singleton.SCREENWIDTH - fontSize.X) / 2, (Singleton.SCREENHEIGHT - fontSize.Y) / 2), Color.Red);
+            case Singleton.GameState.GamePlaying:
+                { // Add new row of bubbles
+                    Singleton.Instance.TimeDown += gameTime.ElapsedGameTime.Ticks;
 
+                    if (Singleton.Instance.TimeDown >= TimeSpan.TicksPerSecond * 10)
+                    {
+                        Singleton.Instance.TimeDown = 0;
+                        MoveBubblesDown();
+                        ResetBubble();
+                        // AddNewRow();
+                    }
+                }
+                break;
+
+            case Singleton.GameState.GameOver:
+                fontSize = _font.MeasureString("Game Over");
+                _spriteBatch.DrawString(_font, "Game Over", new Vector2((965 - fontSize.X)  - 2, (555 - fontSize.Y) - 2), Color.White);
+                _spriteBatch.DrawString(_font, "Game Over", new Vector2((965 - fontSize.X)  + 2, (555 - fontSize.Y)  - 2), Color.White);
+                _spriteBatch.DrawString(_font, "Game Over", new Vector2((965 - fontSize.X)  + 2, (555 - fontSize.Y)  + 2), Color.White);
+                _spriteBatch.DrawString(_font, "Game Over", new Vector2((965 - fontSize.X)  - 2, (555 - fontSize.Y)  + 2), Color.White);
+                _spriteBatch.DrawString(_font, "Game Over", new Vector2((965 - fontSize.X) , (555 - fontSize.Y) ), Color.Red);
+            break;
         }
 
         _spriteBatch.End();
@@ -191,12 +205,22 @@ public class MainScene : Game
         base.Draw(gameTime);
     }
 
+    public void DrawLine(Vector2 start, Vector2 end)
+    {
+        // Calculate the length and angle of the line
+        float length = Vector2.Distance(start, end);
+        float angle = (float)Math.Atan2(end.Y - start.Y, end.X - start.X);
+
+        // Draw the line (stretch the 1x1 texture to the calculated length)
+        _spriteBatch.Draw(lineTexture, start, null, Color.Red, angle, Vector2.Zero, new Vector2(length, 1), SpriteEffects.None, 0f);
+    }
+
     protected void Reset()
     {
         Singleton.Instance.CurrentGameState = Singleton.GameState.Start;
         Singleton.Instance.Score = 0;
         Singleton.Instance.Random = new System.Random();
-
+        Singleton.Instance.totalRows = 5;
 
         Texture2D BubblePuzzleTexture = Content.Load<Texture2D>("Sprite2");
 
@@ -272,8 +296,8 @@ public class MainScene : Game
     //     new Rectangle(20, 460, 70, 70)   // Black
     //     };
 
-    //     int totalRows = 5; // จำนวนแถวทั้งหมด
-    //     for (int row = 0; row < totalRows; row++)  // ✅ วนลูปเพิ่มแถว
+    //     int Singleton.Instance.totalRowsg = 5; // จำนวนแถวทั้งหมด
+    //     for (int row = 0; row < Singleton.Instance.totalRowsg; row++)  // ✅ วนลูปเพิ่มแถว
     //     {
     //         int columns = (row % 2 == 0) ? 10 : 9; // ✅ สลับจำนวนคอลัมน์ระหว่าง 10 และ 9
     //         for (int col = 0; col < columns; col++)
@@ -325,9 +349,9 @@ public class MainScene : Game
             "Black"
         };
 
-        if (totalRows - 1 < 5)
+        if (Singleton.Instance.totalRows - 1 < 5)
         {
-            for (int row = 0; row < totalRows; row++)
+            for (int row = 0; row < Singleton.Instance.totalRows; row++)
             {
                 int columns = (row % 2 == 0) ? 10 : 9; // Alternate between 10 and 9 columns
                 for (int col = 0; col < columns; col++)
@@ -343,7 +367,7 @@ public class MainScene : Game
 
                     // Set Position
                     float posX = 560 + (70 * col) + (35 * (row % 2)); // Adjust odd rows
-                    float posY = totalRows >= 5 ? 100 + (70 * row) : 100; // Increase height for each row
+                    float posY = Singleton.Instance.totalRows >= 5 ? 100 + (70 * row) : 100; // Increase height for each row
 
                     clone.Position = new Vector2(posX, posY); // Place Bubble in the desired vertical row
 
@@ -352,9 +376,9 @@ public class MainScene : Game
                 }
             }
         }
-        else if (totalRows >= 5)
+        else if (Singleton.Instance.totalRows >= 5)
         {
-            int columns = (totalRows % 2 == 0) ? 9 : 10; // Alternate between 10 and 9 columns
+            int columns = (Singleton.Instance.totalRows % 2 == 0) ? 9 : 10; // Alternate between 10 and 9 columns
             for (int col = 0; col < columns; col++)
             {
                 int colorIndex = Singleton.Instance.Random.Next(bubbleColors.Length);
@@ -371,12 +395,12 @@ public class MainScene : Game
                 float posY = 100; // Increase height for each row
 
                 clone.Position = new Vector2(posX, posY); // Place Bubble in the desired vertical row
-                Console.WriteLine($"Added Bubble at X:{posX}, Y:{posY}, Row:{totalRows}, Col:{col}, Name:{clone.Name}");
+                Console.WriteLine($"Added Bubble at X:{posX}, Y:{posY}, Row:{Singleton.Instance.totalRows}, Col:{col}, Name:{clone.Name}");
 
                 _gameObjects.Add(clone);
             }
         }
-        ++totalRows;
+        ++Singleton.Instance.totalRows;
     }
 
     private void MoveBubblesDown()
@@ -411,8 +435,8 @@ public class MainScene : Game
     //         "Black"
     //     };
 
-    //     Console.WriteLine($"Adding New Row: {totalRows + 1}");
-    //     int columns = (totalRows % 2 == 0) ? 10 : 9; ++totalRows;
+    //     Console.WriteLine($"Adding New Row: {Singleton.Instance.totalRowsg + 1}");
+    //     int columns = (Singleton.Instance.totalRowsg % 2 == 0) ? 10 : 9; ++Singleton.Instance.totalRowsg;
     //     for (int col = 0; col < columns; col++)
     //     {
     //         int colorIndex = Singleton.Instance.Random.Next(bubbleColors.Length);
@@ -431,9 +455,25 @@ public class MainScene : Game
     //         clone.Position = new Vector2(posX, posY); // Place Bubble in the desired vertical row
 
     //         _gameObjects.Add(clone);
-    //         Console.WriteLine($"Added Bubble at X:{posX}, Y:{posY}, Row:{totalRows}, Col:{col}, Name:{clone.Name}");
+    //         Console.WriteLine($"Added Bubble at X:{posX}, Y:{posY}, Row:{Singleton.Instance.totalRowsg}, Col:{col}, Name:{clone.Name}");
     //     }
     // }
+
+    protected void DrawEx()
+    {
+        _spriteBatch.Draw(_background, new Vector2(0, 0), new Rectangle(9, 2615, 1921, 1081), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f); // Background
+        _spriteBatch.Draw(_background, new Vector2(1428, 550), new Rectangle(14, 506, 439, 449), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f); // Tree Coconut
+        _spriteBatch.Draw(_background, new Vector2(1400, 511), new Rectangle(11, 322, 425, 100), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f); // Scoreboard
+        _spriteBatch.Draw(_background, new Vector2(1400, 631), new Rectangle(9, 196, 425, 100), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f); // Time
+        _spriteBatch.Draw(_background, new Vector2(40, 550), new Rectangle(26, 977, 426, 520), Color.White, 0f, Vector2.Zero, new Vector2(0.9f, 0.9f), SpriteEffects.None, 0f); // Island & Tree
+        _spriteBatch.Draw(_background, new Vector2(1708, 999), new Rectangle(159, 20, 50, 50), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f); // Yellow Button
+        _spriteBatch.Draw(_background, new Vector2(1770, 999), new Rectangle(89, 20, 50, 50), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f); // Red Button
+        _spriteBatch.Draw(_background, new Vector2(1832, 999), new Rectangle(18, 20, 50, 50), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f); // Green Button
+        _spriteBatch.Draw(_rect, new Vector2(519, 65), null, Color.LightGray /* * 0.5f for transparent*/, 0f, Vector2.Zero, new Vector2(Singleton.PlayWidth, Singleton.PlayHeight), SpriteEffects.None, 0f); // Play Area
+        _spriteBatch.Draw(_rect, new Vector2(519, 980), null, Color.BurlyWood, 0f, Vector2.Zero, new Vector2(Singleton.PlayWidth, 100), SpriteEffects.None, 0f); // Under Play Area
+        DrawRectangleWithOutline(_spriteBatch, _rect, new Rectangle(519, 60, Singleton.PlayWidth, Singleton.PlayHeight), Color.DimGray, 40); // Play Area Outline // Play Area Outline
+        DrawLine(new Vector2(559, 870), new Vector2(1259, 870));
+    }
 
     protected void DrawRectangleWithOutline(SpriteBatch spriteBatch, Texture2D pixel, Rectangle rect, Color outlineColor, int outlineThickness)
     {

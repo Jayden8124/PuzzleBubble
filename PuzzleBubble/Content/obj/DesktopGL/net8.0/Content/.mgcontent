@@ -4,10 +4,10 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>/Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/Content/BG_Sprite.png</File>
-    <File>/Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/Content/GameFont.spritefont</File>
-    <File>/Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/Content/gun.png</File>
-    <File>/Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/Content/Sprite2.png</File>
+    <File>D:/Kmitl Work/Y3T2/Computer Game/Mid Term Proj/08/PuzzleBubble/PuzzleBubble/Content/BG_Sprite.png</File>
+    <File>D:/Kmitl Work/Y3T2/Computer Game/Mid Term Proj/08/PuzzleBubble/PuzzleBubble/Content/GameFont.spritefont</File>
+    <File>D:/Kmitl Work/Y3T2/Computer Game/Mid Term Proj/08/PuzzleBubble/PuzzleBubble/Content/gun.png</File>
+    <File>D:/Kmitl Work/Y3T2/Computer Game/Mid Term Proj/08/PuzzleBubble/PuzzleBubble/Content/Sprite2.png</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />

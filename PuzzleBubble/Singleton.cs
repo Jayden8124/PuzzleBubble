@@ -38,6 +38,8 @@ namespace PuzzleBubble
         }
         public GameState CurrentGameState;
 
+        public int totalRows;
+
         
         // Keyboard State
         public KeyboardState PreviousKey, CurrentKey;
