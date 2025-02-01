@@ -20,33 +20,10 @@ namespace PuzzleBubble
         {
             base.Reset();
         }
+
         public override void Update(GameTime gameTime, List<GameObject> gameObjects)
         {
-            
             base.Update(gameTime, gameObjects);
         }
     }
 }
-
-// DistanceMoved += Math.Abs(Velocity.Y * gameTime.ElapsedGameTime.Ticks / TimeSpan.TicksPerSecond);
-
-//             if (DistanceMoved >= Singleton.SCREENHEIGHT)
-//             {
-//                 IsActive = false;
-//             }
-
-//             Velocity.X = (float)-Math.Sin(Angle) * Speed;
-//             Velocity.Y = (float)-Math.Cos(Angle) * Speed;
-
-//             Position += Velocity * gameTime.ElapsedGameTime.Ticks / TimeSpan.TicksPerSecond;
-
-//             if (Position.X < 515 || Position.X + Rectangle.Width > 1295)
-//             {
-//                 Angle = -Angle;
-//             }
-//             if (Position.Y < 0)
-//             {
-//                 Position.X = 0;
-//                 Position.Y = 0;
-//                 // Velocity = Vector2.Zero;
-//             }
