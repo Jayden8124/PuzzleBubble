@@ -84,9 +84,9 @@ namespace PuzzleBubble
                 // หากต้องการใช้ลูกอื่นๆ ให้เปิด comment ได้ตามที่ต้องการ
                 case 0: return (BubbleBullet)bubbleBulletYellow.Clone();
                 case 1: return (BubbleBullet)bubbleBulletBlue.Clone();
-                // case 2: return (BubbleBullet)bubbleBulletBrown.Clone();
-                // case 3: return (BubbleBullet)bubbleBulletBlack.Clone();
-                default: return (BubbleBullet)bubbleBulletBlue.Clone();
+                case 2: return (BubbleBullet)bubbleBulletBrown.Clone();
+                case 3: return (BubbleBullet)bubbleBulletBlack.Clone();
+                default: return (BubbleBullet)bubbleBulletRed.Clone();
             }
         }
 

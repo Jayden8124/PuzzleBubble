@@ -285,9 +285,9 @@ public class MainScene : Game
         {
             new Rectangle(21, 21, 70, 70),
             new Rectangle(22, 132, 70, 70),
-            // new Rectangle(20, 240, 70, 70),
-            // new Rectangle(20, 350, 70, 70),
-            // new Rectangle(20, 460, 70, 70)
+            new Rectangle(20, 240, 70, 70),
+            new Rectangle(20, 350, 70, 70),
+            new Rectangle(20, 460, 70, 70)
         };
         string[] bubbleColorNames = new string[]
         {
