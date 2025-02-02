@@ -137,7 +137,7 @@ namespace PuzzleBubble
                 obj.Draw(_spriteBatch);
 
             // Every 10 seconds, move all bubbles down and insert a new row at the top.
-            if (Singleton.Instance.TimeDown >= TimeSpan.TicksPerSecond * 3)
+            if (Singleton.Instance.TimeDown >= TimeSpan.TicksPerSecond * 30)
             {
                 Singleton.Instance.TimeDown = 0;
                 InsertNewRowAtTop();
