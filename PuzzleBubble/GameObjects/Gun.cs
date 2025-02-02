@@ -64,8 +64,8 @@ namespace PuzzleBubble
         {
             BubbleBullet bullet = loadedBubble;
             Vector2 gunCenter = new Vector2(
-                Position.X * (float)Math.Cos(Rotation - MathHelper.PiOver2) / 20 + 875, 
-                Position.Y + (float)Math.Sin(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight - 65) 
+                Position.X * (float)Math.Cos(Rotation - MathHelper.PiOver2) / 20 + 875,
+                Position.Y + (float)Math.Sin(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight - 65)
             );
 
             bullet.Position = gunCenter;
@@ -99,8 +99,19 @@ namespace PuzzleBubble
             if (loadedBubble != null)
             {
 
-                Vector2 previewPosition = new Vector2(Position.X, Position.Y - 50);
+                Vector2 previewPosition = new Vector2(Position.X * (float)Math.Cos(Rotation - MathHelper.PiOver2) / 20 + 875,
+                    Position.Y + 2f + (float)Math.Sin(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight - 60));
                 // กำหนดตำแหน่งของ loadedBubble เพื่อให้วาดที่ตำแหน่ง preview
+                // Vector2 gunTipPosition = new Vector2(
+                //     Position.X * (float)Math.Cos(Rotation - MathHelper.PiOver2) / 20 + 875,
+                //     Position.Y + (float)Math.Sin(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight - 60)
+                //  );
+
+                // previewPosition.Position = gunTipPosition;
+                // previewPosition.Velocity = new Vector2((float)Math.Cos(Rotation), (float)Math.Sin(Rotation)) * 50;
+                // previewPosition.Angle = -Rotation;
+                // previewPosition.IsActive = true; // Make
+
                 loadedBubble.Position = previewPosition;
                 loadedBubble.Draw(spriteBatch);
             }
