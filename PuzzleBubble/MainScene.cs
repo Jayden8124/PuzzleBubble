@@ -137,7 +137,7 @@ namespace PuzzleBubble
                 obj.Draw(_spriteBatch);
 
             // Every 10 seconds, move all bubbles down and insert a new row at the top.
-            if (Singleton.Instance.TimeDown >= TimeSpan.TicksPerSecond * 20)
+            if (Singleton.Instance.TimeDown >= TimeSpan.TicksPerSecond * 3)
             {
                 Singleton.Instance.TimeDown = 0;
                 InsertNewRowAtTop();
@@ -273,6 +273,7 @@ namespace PuzzleBubble
                     _gameObjects.Add(clone);
                 }
             }
+            Singleton.Instance.totalRows++;
         }
 
         /// <summary>
@@ -288,14 +289,16 @@ namespace PuzzleBubble
                 {
                     bubble.Row += 1;
                     // Recalculate X position based on the new row’s offset.
-                    int offset = (bubble.Row % 2 == 1) ? 35 : 0;
-                    bubble.Position = new Vector2(560 + (70 * bubble.Col) + offset, 100 + (70 * bubble.Row));
+                    // int offset = (bubble.Row % 2 == 1) ? 35 : 0;
+                    // bubble.Position = new Vector2(560 + (70 * bubble.Col) + offset, 100 + (70 * bubble.Row));
+                    bubble.Position = new Vector2(bubble.Position.X, bubble.Position.Y + 70);
+
                 }
             }
 
             // Decide number of columns for the new top row.
             // (For example, if totalRows is odd, new row gets 9 bubbles; if even, 10 bubbles.)
-            int columns = (Singleton.Instance.totalRows % 2 == 0) ? 10 : 9;
+            int columns = (Singleton.Instance.totalRows % 2 == 0) ? 9 : 10;
             Texture2D bubbleTexture = Content.Load<Texture2D>("SpriteSheet");
             Rectangle[] bubbleColors = new Rectangle[]
             {
@@ -325,7 +328,7 @@ namespace PuzzleBubble
                     Viewport = bubbleColors[colorIndex],
                     Row = newRow,
                     Col = col,
-                    Position = new Vector2(560 + (70 * col) + ((newRow % 2 == 1) ? 35 : 0), 100 + (70 * newRow)),
+                    Position = new Vector2(Singleton.Instance.totalRows % 2 == 0 ? 595 + (70 * col) : 560 + (70 * col), 100 + (70 * newRow)),
                     IsActive = true
                 };
                 _gameObjects.Add(newBubble);
