@@ -2,10 +2,11 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
-using Microsoft.Xna.Framework.Audio; 
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PuzzleBubble;
 
@@ -33,33 +34,39 @@ public class MainScene : Game
         _graphics.PreferredBackBufferWidth = Singleton.SCREENWIDTH;
         _graphics.PreferredBackBufferHeight = Singleton.SCREENHEIGHT;
         _graphics.ApplyChanges();
+
         _gameObjects = new List<GameObject>();
+
         base.Initialize();
     }
 
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+
         _font = Content.Load<SpriteFont>("GameFont");
         _background = Content.Load<Texture2D>("BG_Sprite");
+
         _rect = new Texture2D(GraphicsDevice, 1, 1);
         _rect.SetData(new Color[] { Color.White });
+
         lineTexture = new Texture2D(GraphicsDevice, 1, 1);
         lineTexture.SetData(new Color[] { Color.Red });
-        _spriteBatch = new SpriteBatch(GraphicsDevice);
-        _font = Content.Load<SpriteFont>("GameFont");
-        _background = Content.Load<Texture2D>("BG_Sprite");
-        backgroundMusic = Content.Load<Song>("BGM"); 
-        fireSound = Content.Load<SoundEffect>("FireShoot"); 
+
+        backgroundMusic = Content.Load<Song>("BGM");
+        fireSound = Content.Load<SoundEffect>("FireShoot");
         MediaPlayer.Play(backgroundMusic);
         MediaPlayer.IsRepeating = true;
+
         Reset();
     }
 
     protected override void Update(GameTime gameTime)
     {
         Singleton.Instance.CurrentKey = Keyboard.GetState();
+
         _numObjects = _gameObjects.Count;
+
         switch (Singleton.Instance.CurrentGameState)
         {
             case Singleton.GameState.Start:
@@ -67,31 +74,49 @@ public class MainScene : Game
                 break;
             case Singleton.GameState.GamePlaying:
                 Singleton.Instance.Timer += gameTime.ElapsedGameTime.Ticks;
-                for (int i = 0; i < _numObjects; i++)
+
+                // for (int i = 0; i < _numObjects; i++)
+                // {
+                //     if (_gameObjects[i].IsActive)
+                //         _gameObjects[i].Update(gameTime, _gameObjects);
+                // }
+                // for (int i = 0; i < _numObjects; i++)
+                // {
+                //     if (!_gameObjects[i].IsActive)
+                //     {
+                //         _gameObjects.RemoveAt(i);
+                //         i--;
+                //         _numObjects--;
+                //     }
+                // }
+
+                // Update ทุกออบเจ็กต์ โดยวนลูปผ่านสำเนาของ _gameObjects
+                foreach (var obj in _gameObjects.ToList())
                 {
-                    if (_gameObjects[i].IsActive)
-                        _gameObjects[i].Update(gameTime, _gameObjects);
+                    obj.Update(gameTime, _gameObjects);
                 }
-                for (int i = 0; i < _numObjects; i++)
+
+                // หลังจากอัปเดตแล้ว ลบออบเจ็กต์ที่ไม่ active โดยใช้สำเนาอีกครั้ง
+                foreach (var obj in _gameObjects.ToList())
                 {
-                    if (!_gameObjects[i].IsActive)
+                    if (!obj.IsActive)
                     {
-                        _gameObjects.RemoveAt(i);
-                        i--;
-                        _numObjects--;
+                        _gameObjects.Remove(obj);
                     }
                 }
-                if (Singleton.Instance.BubbleLeft <= 0)
-                {
-                    ResetBubble();
-                    foreach (GameObject s in _gameObjects)
-                    {
-                        if (s is Bubble)
-                        {
-                            s.Reset();
-                        }
-                    }
-                }
+
+
+                // if (Singleton.Instance.BubbleLeft <= 0)
+                // {
+                //     foreach (GameObject s in _gameObjects)
+                //     {
+                //         if (s is Bubble)
+                //         {
+                //             s.Reset();
+                //         }
+                //     }
+                // }
+
                 foreach (GameObject g in _gameObjects)
                 {
                     if (g is BubbleGrid bubble && bubble.Position.Y >= 870)
@@ -99,6 +124,7 @@ public class MainScene : Game
                         Singleton.Instance.CurrentGameState = Singleton.GameState.GameOver;
                     }
                 }
+
                 break;
             case Singleton.GameState.GameOver:
                 if (!Singleton.Instance.CurrentKey.Equals(Singleton.Instance.PreviousKey) && Singleton.Instance.CurrentKey.GetPressedKeys().Length > 0)
@@ -114,8 +140,11 @@ public class MainScene : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.YellowGreen);
+        GraphicsDevice.Clear(Color.White);
+
         _spriteBatch.Begin();
+
+        // Base Background
         _spriteBatch.Draw(_background, new Vector2(0, 0), new Rectangle(9, 2615, 1921, 1081), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f);
         _spriteBatch.Draw(_background, new Vector2(1428, 550), new Rectangle(14, 506, 439, 449), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f);
         _spriteBatch.Draw(_background, new Vector2(1400, 511), new Rectangle(11, 322, 425, 100), Color.White, 0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f);
@@ -128,35 +157,53 @@ public class MainScene : Game
         _spriteBatch.Draw(_rect, new Vector2(519, 980), null, Color.BurlyWood, 0f, Vector2.Zero, new Vector2(Singleton.PlayWidth, 100), SpriteEffects.None, 0f);
         DrawRectangleWithOutline(_spriteBatch, _rect, new Rectangle(519, 60, Singleton.PlayWidth, Singleton.PlayHeight), Color.DimGray, 40);
         DrawLine(new Vector2(559, 870), new Vector2(1259, 870));
+
+        // Get Mouse Position
         MouseState mouseState = Mouse.GetState();
         int mouseX = mouseState.X;
         int mouseY = mouseState.Y;
         string coordinates = $"X: {mouseState.X}, Y: {mouseState.Y}";
         _spriteBatch.DrawString(_font, coordinates, new Vector2(10, 10), Color.Red);
+
+        // Draw Score and Time
         Vector2 fontSize = _font.MeasureString("Score: " + Singleton.Instance.Score.ToString());
         _spriteBatch.DrawString(_font, "Score: " + Singleton.Instance.Score.ToString(), new Vector2(1460, 545), Color.White);
         _spriteBatch.DrawString(_font, "TIME: " + String.Format("{0}:{1:00}", Singleton.Instance.Timer / 600000000, Singleton.Instance.Timer / 10000000 % 60), new Vector2(1460, 665), Color.White);
+
         _numObjects = _gameObjects.Count;
+
         for (int i = 0; i < _numObjects; i++)
         {
             _gameObjects[i].Draw(_spriteBatch);
         }
+
+        // Draw each game state
         switch (Singleton.Instance.CurrentGameState)
         {
             case Singleton.GameState.GamePlaying:
                 {
+                    // { // Add new row of bubblesbubbles
                     Singleton.Instance.TimeDown += gameTime.ElapsedGameTime.Ticks;
+
+                    // if (Singleton.Instance.TimeDown >= TimeSpan.TicksPerSecond * 10)
+                    // {
+                    //     Singleton.Instance.TimeDown = 0;
+                    //     // MoveBubblesDown();
+                    //     ResetBubble();
+                    // }
+                    // }
                 }
                 break;
             case Singleton.GameState.GameOver:
                 fontSize = _font.MeasureString("Game Over");
-                _spriteBatch.DrawString(_font, "Game Over", new Vector2((965 - fontSize.X)  - 2, (555 - fontSize.Y) - 2), Color.White);
-                _spriteBatch.DrawString(_font, "Game Over", new Vector2((965 - fontSize.X)  + 2, (555 - fontSize.Y)  - 2), Color.White);
-                _spriteBatch.DrawString(_font, "Game Over", new Vector2((965 - fontSize.X)  + 2, (555 - fontSize.Y)  + 2), Color.White);
-                _spriteBatch.DrawString(_font, "Game Over", new Vector2((965 - fontSize.X)  - 2, (555 - fontSize.Y)  + 2), Color.White);
+                _spriteBatch.DrawString(_font, "Game Over", new Vector2((965 - fontSize.X) - 2, (555 - fontSize.Y) - 2), Color.White);
+                _spriteBatch.DrawString(_font, "Game Over", new Vector2((965 - fontSize.X) + 2, (555 - fontSize.Y) - 2), Color.White);
+                _spriteBatch.DrawString(_font, "Game Over", new Vector2((965 - fontSize.X) + 2, (555 - fontSize.Y) + 2), Color.White);
+                _spriteBatch.DrawString(_font, "Game Over", new Vector2((965 - fontSize.X) - 2, (555 - fontSize.Y) + 2), Color.White);
                 _spriteBatch.DrawString(_font, "Game Over", new Vector2((965 - fontSize.X), (555 - fontSize.Y)), Color.Red);
                 break;
         }
+
         _spriteBatch.End();
         _graphics.BeginDraw();
         base.Draw(gameTime);
@@ -175,8 +222,11 @@ public class MainScene : Game
         Singleton.Instance.Score = 0;
         Singleton.Instance.Random = new System.Random();
         Singleton.Instance.totalRows = 5;
+
         Texture2D BubblePuzzleTexture = Content.Load<Texture2D>("Sprite2");
+
         _gameObjects.Clear();
+
         _gameObjects.Add(new Gun(BubblePuzzleTexture)
         {
             Name = "Gun",
@@ -217,7 +267,9 @@ public class MainScene : Game
             },
             fireSound = fireSound
         });
+
         ResetBubble();
+
         foreach (GameObject s in _gameObjects)
         {
             s.Reset();
@@ -229,14 +281,13 @@ public class MainScene : Game
     private void ResetBubble()
     {
         Texture2D BubblePuzzleTexture = Content.Load<Texture2D>("SpriteSheet");
-        Singleton.Instance.BubbleLeft = 48;
         Rectangle[] bubbleColors = new Rectangle[]
         {
-            // new Rectangle(21, 21, 70, 70),
-            // new Rectangle(22, 132, 70, 70),
-            new Rectangle(20, 240, 70, 70),
+            new Rectangle(21, 21, 70, 70),
+            new Rectangle(22, 132, 70, 70),
+            // new Rectangle(20, 240, 70, 70),
             // new Rectangle(20, 350, 70, 70),
-            new Rectangle(20, 460, 70, 70)
+            // new Rectangle(20, 460, 70, 70)
         };
         string[] bubbleColorNames = new string[]
         {
@@ -257,14 +308,12 @@ public class MainScene : Game
                     var clone = new BubbleGrid(BubblePuzzleTexture)
                     {
                         Name = "BubbleGrid" + bubbleColorNames[colorIndex],
-                        Score = 30,
-                        Velocity = new Vector2(0, 0),
                         Viewport = bubbleColors[colorIndex],
                         Row = row,
                         Col = col
                     };
                     float posX = 560 + (70 * col) + (35 * (row % 2));
-                    float posY = Singleton.Instance.totalRows >= 5 ? 100 + (70 * row) : 100;
+                    float posY = 100 + (70 * row);
                     clone.Position = new Vector2(posX, posY);
                     _gameObjects.Add(clone);
                 }
@@ -279,8 +328,6 @@ public class MainScene : Game
                 var clone = new BubbleGrid(BubblePuzzleTexture)
                 {
                     Name = "BubbleGrid" + bubbleColorNames[colorIndex],
-                    Score = 30,
-                    Velocity = new Vector2(0, 0),
                     Viewport = bubbleColors[colorIndex],
                     Row = Singleton.Instance.totalRows,
                     Col = col
@@ -301,6 +348,7 @@ public class MainScene : Game
             if (gameObject is BubbleGrid bubble)
             {
                 bubble.Position = new Vector2(bubble.Position.X, bubble.Position.Y + Singleton.SizeBubbleHeight);
+                bubble.Row++;
             }
         }
     }

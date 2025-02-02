@@ -1,9 +1,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework.Audio;
 using System;
+using System.Collections.Generic;
 
 namespace PuzzleBubble
 {
@@ -16,20 +16,30 @@ namespace PuzzleBubble
         public BubbleBullet bubbleBulletBlack;
         public BubbleBullet bubbleBulletRed;
         public SoundEffect fireSound;
-        // float rotationSpeed = 3f; // Speed of gun rotation
-        float minRotation = MathHelper.ToRadians(-45); // Min rotation
-        float maxRotation = MathHelper.ToRadians(45);  // Max rotation
-                                                       // Clamp the rotation to a specific range
+
+        // ฟิลด์สำหรับเก็บลูกที่กำลังจะยิง (preview/loaded bubble)
+        private BubbleBullet loadedBubble;
+
+        // จำกัดมุมหมุนของปืน
+        float minRotation = MathHelper.ToRadians(-45);
+        float maxRotation = MathHelper.ToRadians(45);
 
         public Gun(Texture2D texture) : base(texture)
         {
+        }
+
+        public override void Reset()
+        {
+            // กำหนดให้ loadedBubble เริ่มต้นเป็นลูกบอลแบบสุ่ม
+            loadedBubble = GetRandomBubble();
+            base.Reset();
         }
 
         public override void Update(GameTime gameTime, List<GameObject> gameObjects)
         {
             if (Singleton.Instance.CurrentGameState != Singleton.GameState.GamePlaying) return;
             var kstate = Singleton.Instance.CurrentKey;
-            float speed = 2f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            float speed = 1f * (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (kstate.IsKeyDown(Left))
             {
                 Rotation -= speed;
@@ -47,48 +57,53 @@ namespace PuzzleBubble
             base.Update(gameTime, gameObjects);
         }
 
+        /// <summary>
+        /// ฟังก์ชันยิงลูกบอล โดยใช้ loadedBubble เป็นลูกที่ยิง จากนั้นสร้าง loadedBubble ใหม่
+        /// </summary>
         private void FireBubble(List<GameObject> gameObjects)
         {
-
-            BubbleBullet bullet = GetRandomBubble();
+            BubbleBullet bullet = loadedBubble;
             Vector2 gunCenter = new Vector2(
-                Position.X * (float)Math.Cos(Rotation - MathHelper.PiOver2) / 20 + 875, // หาตำแหน่ง X ของปืน 875
-                                                                                        // Rotation >= 0 ? Position.Y + (float)Math.Sin(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight - 65) // ขยับขึ้นให้เป็นจุดกลางของปืน}
-                                                                                        // : Position.Y + (float)Math.Sin(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight - 60)
-                Position.Y + (float)Math.Sin(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight - 65) // ขยับขึ้นให้เป็นจุดกลางของปืน
+                Position.X * (float)Math.Cos(Rotation - MathHelper.PiOver2) / 20 + 875, 
+                Position.Y + (float)Math.Sin(Rotation - MathHelper.PiOver2) * (Singleton.GunHeight - 65) 
             );
 
-            // ตั้งค่า preview bullet ให้อยู่ตรงกลางของปืน
             bullet.Position = gunCenter;
-            // bullet.Velocity = new Vector2((float)Math.Cos(Rotation), (float)Math.Sin(Rotation)) * 50;
             bullet.Angle = -Rotation; // ไม่ให้หมุน
             bullet.IsActive = true; // แสดง preview เสมอ
-            // bullet.Position = new Vector2(this.Position.X + (Viewport.Width / 2), this.Position.Y - 200);
-            // float angle = Rotation;
-            // bullet.Angle = -angle;
             bullet.Speed = 300f;
-            // bullet.IsActive = true;
             gameObjects.Add(bullet);
+            loadedBubble = GetRandomBubble();
             fireSound.Play();
         }
-
         private BubbleBullet GetRandomBubble()
         {
             int r = Singleton.Instance.Random.Next(5);
             switch (r)
             {
-                // case 0: return (BubbleBullet)bubbleBulletYellow.Clone();
-                // case 1: return (BubbleBullet)bubbleBulletBlue.Clone();
+                // หากต้องการใช้ลูกอื่นๆ ให้เปิด comment ได้ตามที่ต้องการ
+                case 0: return (BubbleBullet)bubbleBulletYellow.Clone();
+                case 1: return (BubbleBullet)bubbleBulletBlue.Clone();
                 // case 2: return (BubbleBullet)bubbleBulletBrown.Clone();
-                case 3: return (BubbleBullet)bubbleBulletBlack.Clone();
-                default: return (BubbleBullet)bubbleBulletRed.Clone();
-                    // default: return (BubbleBullet)bubbleBulletYellow.Clone();
+                // case 3: return (BubbleBullet)bubbleBulletBlack.Clone();
+                default: return (BubbleBullet)bubbleBulletBlue.Clone();
             }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            // วาดปืน
             spriteBatch.Draw(_texture, Position, Viewport, Color.White, Rotation, new Vector2(Viewport.Width / 2, Viewport.Height), 1f, SpriteEffects.None, 0f);
+
+            // วาด preview bubble (loadedBubble) ที่ตำแหน่งที่คุณต้องการ
+            if (loadedBubble != null)
+            {
+
+                Vector2 previewPosition = new Vector2(Position.X, Position.Y - 50);
+                // กำหนดตำแหน่งของ loadedBubble เพื่อให้วาดที่ตำแหน่ง preview
+                loadedBubble.Position = previewPosition;
+                loadedBubble.Draw(spriteBatch);
+            }
             base.Draw(spriteBatch);
         }
     }

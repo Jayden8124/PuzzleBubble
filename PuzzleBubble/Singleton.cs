@@ -15,6 +15,7 @@ namespace PuzzleBubble
         public const int SizeBubbleHeight = 70;
         public int BubbleLeft;
         public int Score;
+        public int totalRows;
         public long Timer;
         public long TimeDown;
         public const int PlayWidth = 780;
@@ -27,7 +28,7 @@ namespace PuzzleBubble
             GameOver
         }
         public GameState CurrentGameState;
-        public int totalRows;
+
         public KeyboardState PreviousKey, CurrentKey;
         private static Singleton instance;
         private Singleton() { }

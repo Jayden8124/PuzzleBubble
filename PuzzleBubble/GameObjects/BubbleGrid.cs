@@ -8,7 +8,6 @@ namespace PuzzleBubble
     {
         public int Row;
         public int Col;
-        public int Score;
 
         public BubbleGrid(Texture2D texture) : base(texture)
         {
@@ -22,8 +21,11 @@ namespace PuzzleBubble
         public static Vector2 GetPositionFromRowCol(int row, int col)
         {
             float x = 560 + (70 * col);
+
             if (row % 2 != 0) x += 35;
+            
             float y = 100 + (70 * row);
+            
             return new Vector2(x, y);
         }
     }
