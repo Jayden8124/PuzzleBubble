@@ -55,6 +55,7 @@ namespace PuzzleBubble
             backgroundMusic = Content.Load<Song>("BGM");
             fireSound = Content.Load<SoundEffect>("FireShoot");
             GameOverVFX = Content.Load<SoundEffect>("GameOver");
+            MediaPlayer.Volume = 0.2f;
             MediaPlayer.Play(backgroundMusic);
             MediaPlayer.IsRepeating = true;
             Reset();
@@ -111,7 +112,12 @@ namespace PuzzleBubble
                             _gameObjects.Remove(obj);
                     }
 
-                     if (Singleton.Instance.Score >= 5000)
+                    if (Singleton.Instance.BubbleLeft <= 0)
+                    {
+                        Singleton.Instance.CurrentGameState = Singleton.GameState.Winstage;
+                    }
+
+                     if (Singleton.Instance.Score >= 1000)
                     {
                     Singleton.Instance.CurrentGameState = Singleton.GameState.Winstage;
                     }
@@ -125,13 +131,6 @@ namespace PuzzleBubble
                         }
                     }
 
-                    foreach (GameObject g in _gameObjects)
-                    {
-                        if (g is BubbleGrid bubble && bubble.Position.Y >= 870)
-                        {
-                            Singleton.Instance.CurrentGameState = Singleton.GameState.GameOver;
-                        }
-                    }
                     break;
                     
                 case Singleton.GameState.GameOver:
@@ -299,6 +298,7 @@ namespace PuzzleBubble
         /// </summary>
         private void CreateInitialGrid()
         {
+            Singleton.Instance.BubbleLeft = 50;
             Texture2D BubblePuzzleTexture = Content.Load<Texture2D>("SpriteSheet");
             Rectangle[] bubbleColors = new Rectangle[]
             {
@@ -379,7 +379,6 @@ namespace PuzzleBubble
                 "Black"
             };
 
-            // Create the new top row (row index = 0).
             int newRow = 0;
             for (int col = 0; col < columns; col++)
             {
@@ -395,7 +394,6 @@ namespace PuzzleBubble
                 };
                 _gameObjects.Add(newBubble);
             }
-            // Increment the total row counter.
             Singleton.Instance.totalRows++;
         }
 

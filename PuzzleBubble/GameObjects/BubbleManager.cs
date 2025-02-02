@@ -87,8 +87,9 @@ namespace PuzzleBubble
                     }
                 }
                 // Award score: for example, if 3 bubbles disappear, score = (3-1)*10 = 20.
-                Singleton.Instance.Score += (cluster.Count - 1) * 10;
-
+                Singleton.Instance.Score += (cluster.Count - 1) * 20;
+                Singleton.Instance.BubbleLeft -= cluster.Count;
+                
                 // Remove any bubbles that are now floating.
                 RemoveFloatingBubbles(gameObjects);
             }
@@ -141,7 +142,8 @@ namespace PuzzleBubble
                 if (!connected.Contains(kvp.Key))
                 {
                     gameObjects.Remove(kvp.Value);
-                    Singleton.Instance.Score += 10;
+                    Singleton.Instance.Score += 20;
+                    Singleton.Instance.BubbleLeft--;
                 }
             }
         }

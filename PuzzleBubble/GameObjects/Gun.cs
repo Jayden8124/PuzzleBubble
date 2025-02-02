@@ -24,6 +24,9 @@ namespace PuzzleBubble
         float minRotation = MathHelper.ToRadians(-45);
         float maxRotation = MathHelper.ToRadians(45);
 
+        private float fireCooldown = 1.0f;
+        private float timeSinceLastShot = 0f;
+
         public Gun(Texture2D texture) : base(texture)
         {
         }
@@ -45,9 +48,13 @@ namespace PuzzleBubble
                 Rotation -= speed;
             if (kstate.IsKeyDown(Right))
                 Rotation += speed;
-            if (kstate.IsKeyDown(Fire) && Singleton.Instance.PreviousKey.IsKeyUp(Fire))
-                FireBubble(gameObjects);
 
+            timeSinceLastShot += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (kstate.IsKeyDown(Fire) && Singleton.Instance.PreviousKey.IsKeyUp(Fire)&& timeSinceLastShot >= fireCooldown)
+            {
+                FireBubble(gameObjects);
+                timeSinceLastShot = 0f;
+            }
             Rotation = MathHelper.Clamp(Rotation, minRotation, maxRotation);
             base.Update(gameTime, gameObjects);
         }

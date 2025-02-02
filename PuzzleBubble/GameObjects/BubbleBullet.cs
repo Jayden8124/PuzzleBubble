@@ -45,7 +45,7 @@ namespace PuzzleBubble
                 {
                     Vector2 bubbleCenter = bubble.Position + new Vector2(bubble.Viewport.Width / 2, bubble.Viewport.Height / 2);
                     float distance = Vector2.Distance(bulletCenter, bubbleCenter);
-                    if (distance < 50) // Rough collision threshold.
+                    if (distance < 70) // Rough collision threshold.
                     {
                         BubbleManager.AttachBubble(this, gameObjects);
                         return;
