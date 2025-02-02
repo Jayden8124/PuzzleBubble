@@ -25,7 +25,8 @@ namespace PuzzleBubble
         {
             Start,
             GamePlaying,
-            GameOver
+            GameOver,
+            Winstage   
         }
         public GameState CurrentGameState;
 

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+
 namespace PuzzleBubble
 {
     public class MainScene : Game
@@ -20,7 +21,9 @@ namespace PuzzleBubble
         Texture2D lineTexture;
         private Song backgroundMusic;
         public SoundEffect fireSound;
-
+        public SoundEffect GameOverVFX;
+        Keys increaseVolumeKey = Keys.Up;
+        Keys decreaseVolumeKey = Keys.Down;
         public MainScene()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -51,6 +54,7 @@ namespace PuzzleBubble
 
             backgroundMusic = Content.Load<Song>("BGM");
             fireSound = Content.Load<SoundEffect>("FireShoot");
+            GameOverVFX = Content.Load<SoundEffect>("GameOver");
             MediaPlayer.Play(backgroundMusic);
             MediaPlayer.IsRepeating = true;
             Reset();
@@ -61,10 +65,37 @@ namespace PuzzleBubble
             Singleton.Instance.CurrentKey = Keyboard.GetState();
             _numObjects = _gameObjects.Count;
 
+            KeyboardState currentKeyState = Keyboard.GetState();
+
+            if (currentKeyState.IsKeyDown(Keys.P))
+            {
+                MediaPlayer.Pause();
+            }
+            if (currentKeyState.IsKeyDown(Keys.R))
+            {
+                MediaPlayer.Resume();
+            }
+
+            if (currentKeyState.IsKeyDown(increaseVolumeKey))
+            {
+            // Increase the volume, ensuring it does not exceed 1.0
+                MediaPlayer.Volume = Math.Min(MediaPlayer.Volume + 0.01f, 1.0f);
+            }
+
+
+            if (currentKeyState.IsKeyDown(decreaseVolumeKey))
+            {
+
+                MediaPlayer.Volume = Math.Max(MediaPlayer.Volume - 0.01f, 0.0f);
+            }   
+
+
             switch (Singleton.Instance.CurrentGameState)
             {
                 case Singleton.GameState.Start:
                     Singleton.Instance.CurrentGameState = Singleton.GameState.GamePlaying;
+                    MediaPlayer.Play(backgroundMusic);
+                    MediaPlayer.IsRepeating = true;
                     break;
                 case Singleton.GameState.GamePlaying:
                     Singleton.Instance.Timer += gameTime.ElapsedGameTime.Ticks;
@@ -79,7 +110,21 @@ namespace PuzzleBubble
                         if (!obj.IsActive)
                             _gameObjects.Remove(obj);
                     }
-                    // If any grid bubble goes too far down, game over.
+
+                     if (Singleton.Instance.Score >= 5000)
+                    {
+                    Singleton.Instance.CurrentGameState = Singleton.GameState.Winstage;
+                    }
+                    foreach (GameObject g in _gameObjects)
+                    {
+                    if (g is BubbleGrid bubble && bubble.Position.Y >= 870)
+                        {
+                        MediaPlayer.Stop();
+                        GameOverVFX.Play();
+                        Singleton.Instance.CurrentGameState = Singleton.GameState.GameOver;
+                        }
+                    }
+
                     foreach (GameObject g in _gameObjects)
                     {
                         if (g is BubbleGrid bubble && bubble.Position.Y >= 870)
@@ -88,6 +133,7 @@ namespace PuzzleBubble
                         }
                     }
                     break;
+                    
                 case Singleton.GameState.GameOver:
                     if (!Singleton.Instance.CurrentKey.Equals(Singleton.Instance.PreviousKey) &&
                         Singleton.Instance.CurrentKey.GetPressedKeys().Length > 0)
@@ -96,6 +142,14 @@ namespace PuzzleBubble
                         Singleton.Instance.CurrentGameState = Singleton.GameState.Start;
                     }
                     break;
+                    case Singleton.GameState.Winstage:
+                    if (!Singleton.Instance.CurrentKey.Equals(Singleton.Instance.PreviousKey) && Singleton.Instance.CurrentKey.GetPressedKeys().Length > 0)
+                    {
+                        Reset();
+                        Singleton.Instance.CurrentGameState = Singleton.GameState.Start;
+                    }
+                break;
+                
             }
             Singleton.Instance.PreviousKey = Singleton.Instance.CurrentKey;
             base.Update(gameTime);
@@ -156,6 +210,14 @@ namespace PuzzleBubble
                 _spriteBatch.DrawString(_font, "Game Over", new Vector2((965 - fontSize.X) + 2, (555 - fontSize.Y) + 2), Color.White);
                 _spriteBatch.DrawString(_font, "Game Over", new Vector2((965 - fontSize.X) - 2, (555 - fontSize.Y) + 2), Color.White);
                 _spriteBatch.DrawString(_font, "Game Over", new Vector2((965 - fontSize.X), (555 - fontSize.Y)), Color.Red);
+                
+            }
+            if (Singleton.Instance.CurrentGameState == Singleton.GameState.Winstage)
+            {
+                Vector2 fontSize = _font.MeasureString("You Win!");
+                _spriteBatch.DrawString(_font, "You Win!", new Vector2((965 - fontSize.X) - 2, (555 - fontSize.Y) - 2), Color.White);
+                _spriteBatch.DrawString(_font, "You Win!", new Vector2((965 - fontSize.X) + 2, (555 - fontSize.Y) - 2), Color.White);
+                _spriteBatch.DrawString(_font, "You Win!", new Vector2((965 - fontSize.X), (555 - fontSize.Y)), Color.Green);
             }
 
             _spriteBatch.End();
