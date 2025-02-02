@@ -295,9 +295,6 @@ namespace PuzzleBubble
             Singleton.Instance.TimeDown = 0;
         }
 
-        /// <summary>
-        /// Creates the initial grid of bubbles.
-        /// </summary>
         private void CreateInitialGrid()
         {
             Singleton.Instance.BubbleLeft = 50;
@@ -340,10 +337,6 @@ namespace PuzzleBubble
             Singleton.Instance.totalRows++;
         }
 
-        /// <summary>
-        /// Moves all grid bubbles down by one row and then inserts a new row at the top.
-        /// The new row’s number of columns alternates (for example, if the current total row count is odd, use 9; if even, use 10).
-        /// </summary>
         private void InsertNewRowAtTop()
         {
             // First, shift every BubbleGrid one row down.

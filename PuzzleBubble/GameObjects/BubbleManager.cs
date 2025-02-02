@@ -7,10 +7,6 @@ namespace PuzzleBubble
 {
     public static class BubbleManager
     {
-        /// <summary>
-        /// Attaches a fired bubble (bullet) to the grid by snapping it into place.
-        /// Then checks for same–color clusters and triggers removal of any floating bubbles.
-        /// </summary>
         public static void AttachBubble(BubbleBullet bullet, List<GameObject> gameObjects)
         {
             // Calculate grid coordinates.
@@ -95,10 +91,6 @@ namespace PuzzleBubble
             }
         }
 
-        /// <summary>
-        /// Rebuilds the grid from the current game objects and removes any bubble that is not connected
-        /// to the top row (row 0). For each removed floating bubble, an additional 10 points are awarded.
-        /// </summary>
         private static void RemoveFloatingBubbles(List<GameObject> gameObjects)
         {
             // Rebuild the grid dictionary from the current game objects.
@@ -143,18 +135,11 @@ namespace PuzzleBubble
                 {
                     gameObjects.Remove(kvp.Value);
                     Singleton.Instance.Score += 20;
-                    if (grid.ContainsKey(kvp.Key)) // Check if the bubble is part of the grid
-                    {
-                        Singleton.Instance.BubbleLeft--;
-                    }
+                    Singleton.Instance.BubbleLeft--;
                 }
             }
         }
 
-        /// <summary>
-        /// Returns the valid neighbor cell coordinates for a given (row, col) in the grid.
-        /// The neighbors differ for even vs. odd rows.
-        /// </summary>
         private static IEnumerable<(int, int)> GetNeighbors(int row, int col, Dictionary<(int, int), BubbleGrid> grid)
         {
             List<(int, int)> neighbors = new List<(int, int)>();
@@ -184,10 +169,6 @@ namespace PuzzleBubble
             }
         }
 
-        /// <summary>
-        /// Extracts the bubble “color” from the object’s Name.
-        /// (For example, if Name is "BubbleGridRed", it returns "Red".)
-        /// </summary>
         private static string GetColorFromName(string name)
         {
             if (name.StartsWith("BubbleGrid"))

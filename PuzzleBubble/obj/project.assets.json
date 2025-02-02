@@ -267,19 +267,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\User\\.nuget\\packages\\": {}
+    "/Users/jay/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Kmitl Work\\Y3T2\\Computer Game\\Mid Term Proj\\10\\PuzzleBubble\\PuzzleBubble\\PuzzleBubble.csproj",
+      "projectUniqueName": "/Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/PuzzleBubble.csproj",
       "projectName": "PuzzleBubble",
-      "projectPath": "D:\\Kmitl Work\\Y3T2\\Computer Game\\Mid Term Proj\\10\\PuzzleBubble\\PuzzleBubble\\PuzzleBubble.csproj",
-      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "D:\\Kmitl Work\\Y3T2\\Computer Game\\Mid Term Proj\\10\\PuzzleBubble\\PuzzleBubble\\obj\\",
+      "projectPath": "/Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/PuzzleBubble.csproj",
+      "packagesPath": "/Users/jay/.nuget/packages/",
+      "outputPath": "/Users/jay/KMITL/Year3_2567/Semester_2/Computer_Game_Programming/Puzzle_Bubble/PuzzleBubble/PuzzleBubble/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/Users/jay/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -301,9 +301,8 @@
       "restoreAuditProperties": {
         "enableAudit": "true",
         "auditLevel": "low",
-        "auditMode": "all"
-      },
-      "SdkAnalysisLevel": "9.0.100"
+        "auditMode": "direct"
+      }
     },
     "frameworks": {
       "net8.0": {
@@ -338,7 +337,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.404/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
