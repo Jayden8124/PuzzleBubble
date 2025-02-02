@@ -162,6 +162,7 @@ namespace PuzzleBubble
             // Draw background elements.
             _spriteBatch.Draw(_background, new Vector2(0, 0), new Rectangle(9, 2615, 1921, 1081), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             _spriteBatch.Draw(_background, new Vector2(1428, 550), new Rectangle(14, 506, 439, 449), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            _spriteBatch.Draw(_background, new Vector2(1400, 391), new Rectangle(11, 322, 425, 100), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             _spriteBatch.Draw(_background, new Vector2(1400, 511), new Rectangle(11, 322, 425, 100), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             _spriteBatch.Draw(_background, new Vector2(1400, 631), new Rectangle(9, 196, 425, 100), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             _spriteBatch.Draw(_background, new Vector2(40, 550), new Rectangle(26, 977, 426, 520), Color.White, 0f, Vector2.Zero, 0.9f, SpriteEffects.None, 0f);
@@ -179,6 +180,7 @@ namespace PuzzleBubble
             _spriteBatch.DrawString(_font, coordinates, new Vector2(10, 10), Color.Red);
 
             // Draw score and time.
+            _spriteBatch.DrawString(_font,"Bubble Left: " + Singleton.Instance.BubbleLeft.ToString(), new Vector2(1460, 425), Color.White);
             _spriteBatch.DrawString(_font, "Score: " + Singleton.Instance.Score.ToString(), new Vector2(1460, 545), Color.White);
             _spriteBatch.DrawString(_font, "TIME: " +
                 String.Format("{0}:{1:00}",
