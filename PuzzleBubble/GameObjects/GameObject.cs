@@ -1,11 +1,11 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
 
 namespace PuzzleBubble
 {
-    class GameObject : ICloneable
+    public class GameObject : ICloneable
     {
         protected Texture2D _texture;
 
@@ -19,11 +19,11 @@ namespace PuzzleBubble
 
         public Rectangle Rectangle
         {
-            get
-            {
-                return new Rectangle((int)Position.X, (int)Position.Y, Viewport.Width, Viewport.Height);
-            }
+            get { return new Rectangle((int)Position.X, (int)Position.Y, Viewport.Width, Viewport.Height); }
         }
+
+        // Expose the texture (useful for when a BubbleBullet becomes a BubbleGrid)
+        public Texture2D Texture => _texture;
 
         public GameObject()
         {
@@ -58,47 +58,5 @@ namespace PuzzleBubble
         {
             return this.MemberwiseClone();
         }
-
-        #region Collision
-        public bool IsTouching(GameObject g)
-        {
-            return IsTouchingLeft(g) ||
-                   IsTouchingTop(g) ||
-                   IsTouchingRight(g) ||
-                   IsTouchingBottom(g);
-        }
-
-        protected bool IsTouchingLeft(GameObject g)
-        {
-            return this.Rectangle.Right > g.Rectangle.Left &&
-                    this.Rectangle.Left < g.Rectangle.Left &&
-                    this.Rectangle.Bottom > g.Rectangle.Top &&
-                    this.Rectangle.Top < g.Rectangle.Bottom;
-        }
-
-        protected bool IsTouchingRight(GameObject g)
-        {
-            return this.Rectangle.Right > g.Rectangle.Right &&
-                    this.Rectangle.Left < g.Rectangle.Right &&
-                    this.Rectangle.Bottom > g.Rectangle.Top &&
-                    this.Rectangle.Top < g.Rectangle.Bottom;
-        }
-
-        protected bool IsTouchingTop(GameObject g)
-        {
-            return this.Rectangle.Right > g.Rectangle.Left &&
-                    this.Rectangle.Left < g.Rectangle.Right &&
-                    this.Rectangle.Bottom > g.Rectangle.Top &&
-                    this.Rectangle.Top < g.Rectangle.Top;
-        }
-
-        protected bool IsTouchingBottom(GameObject g)
-        {
-            return this.Rectangle.Right > g.Rectangle.Left &&
-                    this.Rectangle.Left < g.Rectangle.Right &&
-                    this.Rectangle.Bottom > g.Rectangle.Bottom &&
-                    this.Rectangle.Top < g.Rectangle.Bottom;
-        }
-        #endregion
     }
 }

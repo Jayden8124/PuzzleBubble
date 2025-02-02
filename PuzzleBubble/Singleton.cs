@@ -3,7 +3,7 @@ using System;
 
 namespace PuzzleBubble
 {
-    class Singleton
+    public class Singleton
     {
         public const int SCREENWIDTH = 1920;
         public const int SCREENHEIGHT = 1080;

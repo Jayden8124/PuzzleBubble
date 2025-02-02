@@ -1,10 +1,9 @@
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace PuzzleBubble
 {
-    class Bubble : GameObject
+    public class Bubble : GameObject
     {
         public Bubble(Texture2D texture) : base(texture)
         {
@@ -21,7 +20,7 @@ namespace PuzzleBubble
             base.Reset();
         }
 
-        public override void Update(GameTime gameTime, List<GameObject> gameObjects)
+        public override void Update(GameTime gameTime, System.Collections.Generic.List<GameObject> gameObjects)
         {
             base.Update(gameTime, gameObjects);
         }
